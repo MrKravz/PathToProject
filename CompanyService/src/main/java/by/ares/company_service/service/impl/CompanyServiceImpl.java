@@ -1,0 +1,54 @@
+package by.ares.company_service.service.impl;
+
+import by.ares.company_service.dto.CompanyDto;
+import by.ares.company_service.dto.request.CompanyCreationRequest;
+import by.ares.company_service.dto.request.UpdateCompanyRequest;
+import by.ares.company_service.exception.CarNotFoundException;
+import by.ares.company_service.exception.CompanyNotFoundException;
+import by.ares.company_service.mapper.CompanyDtoMapper;
+import by.ares.company_service.mapper.CompanyRequestMapper;
+import by.ares.company_service.repository.CompanyRepository;
+import by.ares.company_service.service.CompanyService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class CompanyServiceImpl implements CompanyService {
+
+    private final CompanyRepository companyRepository;
+    private final CompanyDtoMapper companyDtoMapper;
+    private final CompanyRequestMapper companyRequestMapper;
+
+    @Override
+    public CompanyDto findById(Long id) {
+        return companyRepository.findById(id)
+                .map(companyDtoMapper::map)
+                .orElseThrow(() -> new CompanyNotFoundException("Company with this id not found"));
+    }
+
+    @Override
+    public CompanyDto save(CompanyCreationRequest companyCreationRequest) {
+        return companyDtoMapper.map(
+                companyRepository.save(companyRequestMapper.map(companyCreationRequest))
+        );
+    }
+
+    @Override
+    public CompanyDto update(UpdateCompanyRequest updateCompanyRequest, Long id) {
+        var company = companyRepository.findById(id)
+                .orElseThrow(() -> new CarNotFoundException("Company with this id not found"));
+        company.setCompanyName(updateCompanyRequest.companyName())
+                .setFullName(updateCompanyRequest.fullName())
+                .setAddress(updateCompanyRequest.address())
+                .setPhoneNumber(updateCompanyRequest.phoneNumber());
+        return companyDtoMapper.map(
+                companyRepository.save(company)
+        );
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        companyRepository.deleteById(id);
+    }
+}
