@@ -1,7 +1,10 @@
 package by.ares.company_service.dto;
 
+import lombok.Data;
+
 import java.util.Set;
 
+@Data
 public class CompanyDto {
     private Long id;
     private String identifier;

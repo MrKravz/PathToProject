@@ -34,13 +34,15 @@ CREATE TABLE companies
 CREATE TABLE company_cars
 (
     company_id BIGINT REFERENCES companies (id),
-    car_id     BIGINT REFERENCES cars (id)
+    car_id     BIGINT REFERENCES cars (id),
+    deleted      BOOLEAN     NOT NULL
 );
 
 CREATE TABLE company_drivers
 (
     company_id BIGINT REFERENCES companies (id),
-    driver_id  BIGINT REFERENCES car_drivers (id)
+    driver_id  BIGINT REFERENCES car_drivers (id),
+    deleted      BOOLEAN     NOT NULL
 );
 
 
