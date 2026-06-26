@@ -35,10 +35,10 @@ public class Company {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @ManyToMany(mappedBy = "companySet")
+    @ManyToMany(mappedBy = "companies")
     private Set<Car> cars;
 
-    @ManyToMany(mappedBy = "companySet")
+    @ManyToMany(mappedBy = "companies")
     private Set<CarDriver> carDrivers;
 
 }

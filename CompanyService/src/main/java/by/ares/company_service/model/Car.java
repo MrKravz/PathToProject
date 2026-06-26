@@ -41,6 +41,6 @@ public class Car {
                     referencedColumnName = "id"
             )
     )
-    private Set<Company> companySet;
+    private Set<Company> companies;
 
 }

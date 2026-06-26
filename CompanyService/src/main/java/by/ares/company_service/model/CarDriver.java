@@ -1,8 +1,7 @@
 package by.ares.company_service.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.SoftDelete;
 
@@ -13,6 +12,9 @@ import java.util.Set;
 @Entity
 @Table(name = "car_drivers")
 @Accessors(chain = true)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @SoftDelete(columnName = "deleted")
 public class CarDriver {
 
@@ -44,6 +46,6 @@ public class CarDriver {
                     referencedColumnName = "id"
             )
     )
-    private Set<Company> companySet;
+    private Set<Company> companies;
 
 }

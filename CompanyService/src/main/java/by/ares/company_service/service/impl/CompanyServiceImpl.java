@@ -10,6 +10,9 @@ import by.ares.company_service.mapper.CompanyRequestMapper;
 import by.ares.company_service.repository.CompanyRepository;
 import by.ares.company_service.service.CompanyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,7 +23,9 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyDtoMapper companyDtoMapper;
     private final CompanyRequestMapper companyRequestMapper;
 
+
     @Override
+    @Cacheable(value = "companies", key = "'company:' + #id", sync = true)
     public CompanyDto findById(Long id) {
         return companyRepository.findById(id)
                 .map(companyDtoMapper::map)
@@ -35,6 +40,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    @CachePut(value = "companies", key = "'company:' + #id")
     public CompanyDto update(UpdateCompanyRequest updateCompanyRequest, Long id) {
         var company = companyRepository.findById(id)
                 .orElseThrow(() -> new CarNotFoundException("Company with this id not found"));
@@ -48,6 +54,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    @CacheEvict(value = "companies", key = "'company:' + #id")
     public void deleteById(Long id) {
         companyRepository.deleteById(id);
     }
