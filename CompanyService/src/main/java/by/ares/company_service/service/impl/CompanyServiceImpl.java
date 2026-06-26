@@ -3,7 +3,6 @@ package by.ares.company_service.service.impl;
 import by.ares.company_service.dto.CompanyDto;
 import by.ares.company_service.dto.request.CompanyCreationRequest;
 import by.ares.company_service.dto.request.UpdateCompanyRequest;
-import by.ares.company_service.exception.CarNotFoundException;
 import by.ares.company_service.exception.CompanyNotFoundException;
 import by.ares.company_service.mapper.CompanyDtoMapper;
 import by.ares.company_service.mapper.CompanyRequestMapper;
@@ -43,7 +42,7 @@ public class CompanyServiceImpl implements CompanyService {
     @CachePut(value = "companies", key = "'company:' + #id")
     public CompanyDto update(UpdateCompanyRequest updateCompanyRequest, Long id) {
         var company = companyRepository.findById(id)
-                .orElseThrow(() -> new CarNotFoundException("Company with this id not found"));
+                .orElseThrow(() -> new CompanyNotFoundException("Company with this id not found"));
         company.setCompanyName(updateCompanyRequest.companyName())
                 .setFullName(updateCompanyRequest.fullName())
                 .setAddress(updateCompanyRequest.address())
