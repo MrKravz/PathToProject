@@ -13,6 +13,7 @@ public class TestConstants {
     public static final Long NOT_EXISTING_CAR_ID = 0L;
     public static final String CAR_MARK = "Mercedes-Benz";
     public static final Integer CAR_MILEAGE = 1000;
+    public static final Integer UPDATED_CAR_MILEAGE = 1500;
     public static final String CAR_RESIDENT_NUMBER = "1234AS";
     public static final Long EXISTING_COMPANY_ID = 1L;
     public static final Long NOT_EXISTING_COMPANY_ID = 0L;

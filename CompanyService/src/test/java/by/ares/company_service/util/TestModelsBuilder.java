@@ -102,7 +102,7 @@ public class TestModelsBuilder {
     }
 
     public static UpdateCarRequest buildUpdateCarRequest() {
-        return new UpdateCarRequest(CAR_MARK, CAR_MILEAGE);
+        return new UpdateCarRequest(CAR_MARK, UPDATED_CAR_MILEAGE);
     }
 
     public static CarCreationRequest buildCarCreationRequest() {

@@ -9,7 +9,6 @@ import by.ares.company_service.mapper.CarRequestMapper;
 import by.ares.company_service.model.Car;
 import by.ares.company_service.repository.CarRepository;
 import by.ares.company_service.service.impl.CarServiceImpl;
-import by.ares.company_service.util.TestModelsBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +22,7 @@ import java.util.Optional;
 
 import static by.ares.company_service.util.TestConstants.EXISTING_CAR_ID;
 import static by.ares.company_service.util.TestConstants.NOT_EXISTING_CAR_ID;
+import static by.ares.company_service.util.TestModelsBuilder.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -52,10 +52,10 @@ class CarServiceImplTest {
 
     @BeforeEach
     void init() {
-        car = TestModelsBuilder.buildCar();
-        carDto = TestModelsBuilder.buildCarDto();
-        carCreationRequest = TestModelsBuilder.buildCarCreationRequest();
-        updateCarRequest = TestModelsBuilder.buildUpdateCarRequest();
+        car = buildCar();
+        carDto = buildCarDto();
+        carCreationRequest = buildCarCreationRequest();
+        updateCarRequest = buildUpdateCarRequest();
         lenient().when(cacheManager.getCache(anyString())).thenReturn(cache);
     }
 
