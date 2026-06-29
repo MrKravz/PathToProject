@@ -6,11 +6,12 @@ import by.ares.company_service.dto.request.UpdateCarRequest;
 import by.ares.company_service.exception.CarNotFoundException;
 import by.ares.company_service.mapper.CarDtoMapper;
 import by.ares.company_service.mapper.CarRequestMapper;
+import by.ares.company_service.model.Company;
 import by.ares.company_service.repository.CarRepository;
+import by.ares.company_service.service.CacheEvictionService;
 import by.ares.company_service.service.CarService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -25,7 +26,7 @@ public class CarServiceImpl implements CarService {
     private final CarRepository carRepository;
     private final CarDtoMapper carDtoMapper;
     private final CarRequestMapper carRequestMapper;
-    private final CacheManager cacheManager;
+    private final CacheEvictionService<Company> cacheEvictionService;
 
     @Override
     @Cacheable(value = "cars", key = "'car:' + #id", sync = true)
@@ -51,14 +52,7 @@ public class CarServiceImpl implements CarService {
                 .orElseThrow(() -> new CarNotFoundException(CAR_NOT_FOUND_MESSAGE));
         car.setMark(updateCarRequest.mark())
                 .setMileage(updateCarRequest.mileage());
-        car.getCompanies()
-                .forEach(company -> {
-                            var cache = cacheManager.getCache(COMPANY_CACHE_NAME);
-                            if (cache != null) {
-                                cache.evict(COMPANY_CACHE_KEY + company.getId());
-                            }
-                        }
-                );
+        cacheEvictionService.evictAll(car.getCompanies());
         return carDtoMapper.map(
                 carRepository.save(car)
         );
@@ -70,14 +64,7 @@ public class CarServiceImpl implements CarService {
     public void deleteById(Long id) {
         var car = carRepository.findById(id)
                 .orElseThrow(() -> new CarNotFoundException(CAR_NOT_FOUND_MESSAGE));
-        car.getCompanies()
-                .forEach(company -> {
-                            var cache = cacheManager.getCache(COMPANY_CACHE_NAME);
-                            if (cache != null) {
-                                cache.evict(COMPANY_CACHE_KEY + company.getId());
-                            }
-                        }
-                );
+        cacheEvictionService.evictAll(car.getCompanies());
         carRepository.deleteById(id);
     }
 

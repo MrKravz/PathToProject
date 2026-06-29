@@ -6,11 +6,12 @@ import by.ares.company_service.dto.request.UpdateCarDriverRequest;
 import by.ares.company_service.exception.CarDriverNotFoundException;
 import by.ares.company_service.mapper.CarDriverDtoMapper;
 import by.ares.company_service.mapper.CarDriverRequestMapper;
+import by.ares.company_service.model.Company;
 import by.ares.company_service.repository.CarDriverRepository;
+import by.ares.company_service.service.CacheEvictionService;
 import by.ares.company_service.service.CarDriverService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -25,7 +26,7 @@ public class CarDriverServiceImpl implements CarDriverService {
     private final CarDriverRepository carDriverRepository;
     private final CarDriverRequestMapper carDriverRequestMapper;
     private final CarDriverDtoMapper carDriverDtoMapper;
-    private final CacheManager cacheManager;
+    private final CacheEvictionService<Company> cacheEvictionService;
 
     @Override
     @Cacheable(value = "car_drivers", key = "'car_driver:' + #id", sync = true)
@@ -52,14 +53,7 @@ public class CarDriverServiceImpl implements CarDriverService {
         carDriver.setName(updateCarDriverRequest.name())
                 .setSurname(updateCarDriverRequest.surname())
                 .setLastname(updateCarDriverRequest.lastname());
-        carDriver.getCompanies()
-                .forEach(company -> {
-                            var cache = cacheManager.getCache(COMPANY_CACHE_NAME);
-                            if (cache != null) {
-                                cache.evict(COMPANY_CACHE_KEY + company.getId());
-                            }
-                        }
-                );
+        cacheEvictionService.evictAll(carDriver.getCompanies());
         return carDriverDtoMapper.map(
                 carDriverRepository.save(carDriver)
         );
@@ -71,14 +65,7 @@ public class CarDriverServiceImpl implements CarDriverService {
     public void deleteById(Long id) {
         var carDriver = carDriverRepository.findById(id)
                 .orElseThrow(() -> new CarDriverNotFoundException(CAR_DRIVER_NOT_FOUND_MESSAGE));
-        carDriver.getCompanies()
-                .forEach(company -> {
-                            var cache = cacheManager.getCache(COMPANY_CACHE_NAME);
-                            if (cache != null) {
-                                cache.evict(COMPANY_CACHE_KEY + company.getId());
-                            }
-                        }
-                );
+        cacheEvictionService.evictAll(carDriver.getCompanies());
         carDriverRepository.deleteById(id);
     }
 }
