@@ -72,13 +72,13 @@ public class TestModelsBuilder {
 
     public static CompanyCreationRequest buildCompanyCreationRequest() {
         return new CompanyCreationRequest(COMPANY_IDENTIFIER, COMPANY_NAME,
-                COMPANY_FULL_NAME, COMPANY_ADDRESS, COMPANY_ADDRESS);
+                COMPANY_FULL_NAME, COMPANY_ADDRESS, COMPANY_PHONE_NUMBER);
 
     }
 
     public static UpdateCompanyRequest buildUpdateCompanyRequest() {
         return new UpdateCompanyRequest(COMPANY_NAME, COMPANY_FULL_NAME,
-                COMPANY_ADDRESS, COMPANY_ADDRESS);
+                UPDATED_COMPANY_ADDRESS, COMPANY_PHONE_NUMBER);
 
     }
 

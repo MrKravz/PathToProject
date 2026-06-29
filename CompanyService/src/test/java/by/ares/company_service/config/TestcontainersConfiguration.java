@@ -1,4 +1,4 @@
-package by.ares.company_service.integration;
+package by.ares.company_service.config;
 
 import com.redis.testcontainers.RedisContainer;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -19,9 +19,7 @@ public class TestcontainersConfiguration {
     @Bean
     @ServiceConnection
     RedisContainer redisContainer() {
-        return new RedisContainer((DockerImageName.parse("redis:7")))
-                .withExposedPorts(6379)
-                .withReuse(true);
+        return new RedisContainer((DockerImageName.parse("redis:7")));
     }
 
 }
