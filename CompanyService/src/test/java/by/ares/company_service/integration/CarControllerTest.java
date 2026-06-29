@@ -20,7 +20,7 @@ class CarControllerTest extends AbstractIntegrationTest {
     public CarRepository carRepository;
 
     private Car saveCar() {
-        return carRepository.save(buildCar().setId(null));
+        return carRepository.save(buildCar().setId(null).setCompanies(null));
     }
 
     @Test

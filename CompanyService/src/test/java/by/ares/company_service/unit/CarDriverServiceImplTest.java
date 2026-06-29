@@ -21,6 +21,7 @@ import org.springframework.cache.CacheManager;
 
 import java.util.Optional;
 
+import static by.ares.company_service.util.CompanyServiceConstants.COMPANY_CACHE_KEY;
 import static by.ares.company_service.util.TestConstants.EXISTING_CAR_DRIVER_ID;
 import static by.ares.company_service.util.TestConstants.NOT_EXISTING_CAR_DRIVER_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -95,6 +96,10 @@ class CarDriverServiceImplTest {
         when(carDriverDtoMapper.map(carDriver)).thenReturn(carDriverDto);
         var result = carDriverService.update(updateCarDriverRequest, EXISTING_CAR_DRIVER_ID);
         assertEquals(carDriverDto.getLastname(), result.getLastname());
+        carDriver.getCompanies()
+                .forEach(
+                        x -> verify(cache).evict(COMPANY_CACHE_KEY + x.getId())
+                );
         verify(carDriverRepository).findById(EXISTING_CAR_DRIVER_ID);
         verify(carDriverRepository).save(carDriver);
         verify(carDriverDtoMapper).map(carDriver);
@@ -112,7 +117,12 @@ class CarDriverServiceImplTest {
     void deleteById_shouldDeleteCarDriver() {
         when(carDriverRepository.findById(EXISTING_CAR_DRIVER_ID)).thenReturn(Optional.of(carDriver));
         carDriverService.deleteById(EXISTING_CAR_DRIVER_ID);
+        carDriver.getCompanies()
+                .forEach(
+                        x -> verify(cache).evict(COMPANY_CACHE_KEY + x.getId())
+                );
         verify(carDriverRepository).findById(EXISTING_CAR_DRIVER_ID);
+        verify(carDriverRepository).deleteById(EXISTING_CAR_DRIVER_ID);
     }
 
     @Test

@@ -9,6 +9,7 @@ import by.ares.company_service.model.CarDriver;
 import by.ares.company_service.model.Company;
 
 import java.util.Collections;
+import java.util.Set;
 
 import static by.ares.company_service.util.TestConstants.*;
 
@@ -20,7 +21,7 @@ public class TestModelsBuilder {
                 .surname(CAR_DRIVER_SURNAME)
                 .lastname(CAR_DRIVER_LASTNAME)
                 .driverLicenseNumber(CAR_DRIVER_LICENSE_NUMBER)
-                .companies(Collections.emptySet())
+                .companies(mockCompanies())
                 .build();
     }
 
@@ -97,7 +98,7 @@ public class TestModelsBuilder {
                 .mark(CAR_MARK)
                 .mileage(CAR_MILEAGE)
                 .residentNumber(CAR_RESIDENT_NUMBER)
-                .companies(Collections.emptySet())
+                .companies(mockCompanies())
                 .build();
     }
 
@@ -107,6 +108,11 @@ public class TestModelsBuilder {
 
     public static CarCreationRequest buildCarCreationRequest() {
         return new CarCreationRequest(CAR_MARK, CAR_RESIDENT_NUMBER, CAR_MILEAGE);
+    }
+
+    public static Set<Company> mockCompanies() {
+        return Set.of(new Company().setId(EXISTING_COMPANY_ID),
+                new Company().setId(NOT_EXISTING_COMPANY_ID));
     }
 
 }

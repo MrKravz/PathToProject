@@ -16,6 +16,8 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import static by.ares.company_service.util.CompanyServiceConstants.*;
+
 @Service
 @RequiredArgsConstructor
 public class CarDriverServiceImpl implements CarDriverService {
@@ -25,16 +27,12 @@ public class CarDriverServiceImpl implements CarDriverService {
     private final CarDriverDtoMapper carDriverDtoMapper;
     private final CacheManager cacheManager;
 
-    private static final String COMPANY_CACHE_NAME = "companies";
-    private static final String COMPANY_CACHE_KEY = "company:";
-    private static final String NOT_FOUND_MESSAGE = "Car driver with this id not found";
-
     @Override
     @Cacheable(value = "car_drivers", key = "'car_driver:' + #id", sync = true)
     public CarDriverDto findById(Long id) {
         return carDriverRepository.findById(id)
                 .map(carDriverDtoMapper::map)
-                .orElseThrow(() -> new CarDriverNotFoundException(NOT_FOUND_MESSAGE));
+                .orElseThrow(() -> new CarDriverNotFoundException(CAR_DRIVER_NOT_FOUND_MESSAGE));
     }
 
     @Override
@@ -50,7 +48,7 @@ public class CarDriverServiceImpl implements CarDriverService {
     @CachePut(value = "car_drivers", key = "'car_driver:' + #id")
     public CarDriverDto update(UpdateCarDriverRequest updateCarDriverRequest, Long id) {
         var carDriver = carDriverRepository.findById(id)
-                .orElseThrow(() -> new CarDriverNotFoundException(NOT_FOUND_MESSAGE));
+                .orElseThrow(() -> new CarDriverNotFoundException(CAR_DRIVER_NOT_FOUND_MESSAGE));
         carDriver.setName(updateCarDriverRequest.name())
                 .setSurname(updateCarDriverRequest.surname())
                 .setLastname(updateCarDriverRequest.lastname());
@@ -72,7 +70,7 @@ public class CarDriverServiceImpl implements CarDriverService {
     @CacheEvict(value = "car_drivers", key = "'car_driver:' + #id")
     public void deleteById(Long id) {
         var carDriver = carDriverRepository.findById(id)
-                .orElseThrow(() -> new CarDriverNotFoundException(NOT_FOUND_MESSAGE));
+                .orElseThrow(() -> new CarDriverNotFoundException(CAR_DRIVER_NOT_FOUND_MESSAGE));
         carDriver.getCompanies()
                 .forEach(company -> {
                             var cache = cacheManager.getCache(COMPANY_CACHE_NAME);

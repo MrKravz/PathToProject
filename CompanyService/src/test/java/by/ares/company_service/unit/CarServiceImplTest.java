@@ -20,6 +20,7 @@ import org.springframework.cache.CacheManager;
 
 import java.util.Optional;
 
+import static by.ares.company_service.util.CompanyServiceConstants.COMPANY_CACHE_KEY;
 import static by.ares.company_service.util.TestConstants.EXISTING_CAR_ID;
 import static by.ares.company_service.util.TestConstants.NOT_EXISTING_CAR_ID;
 import static by.ares.company_service.util.TestModelsBuilder.*;
@@ -90,11 +91,16 @@ class CarServiceImplTest {
 
     @Test
     void update_shouldUpdateCar() {
+
         when(carRepository.findById(EXISTING_CAR_ID)).thenReturn(Optional.of(car));
         when(carRepository.save(car)).thenReturn(car);
         when(carDtoMapper.map(car)).thenReturn(carDto);
         var result = carService.update(updateCarRequest, EXISTING_CAR_ID);
         assertEquals(carDto.getMark(), result.getMark());
+        car.getCompanies()
+                .forEach(
+                        x -> verify(cache).evict(COMPANY_CACHE_KEY + x.getId())
+                );
         verify(carRepository).findById(EXISTING_CAR_ID);
         verify(carRepository).save(car);
         verify(carDtoMapper).map(car);
@@ -112,6 +118,10 @@ class CarServiceImplTest {
     void deleteById_shouldDeleteCar() {
         when(carRepository.findById(EXISTING_CAR_ID)).thenReturn(Optional.of(car));
         carService.deleteById(EXISTING_CAR_ID);
+        car.getCompanies()
+                .forEach(
+                        x -> verify(cache).evict(COMPANY_CACHE_KEY + x.getId())
+                );
         verify(carRepository).findById(EXISTING_CAR_ID);
         verify(carRepository).deleteById(EXISTING_CAR_ID);
     }

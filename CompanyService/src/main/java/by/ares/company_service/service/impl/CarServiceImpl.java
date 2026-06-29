@@ -16,6 +16,8 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import static by.ares.company_service.util.CompanyServiceConstants.*;
+
 @Service
 @RequiredArgsConstructor
 public class CarServiceImpl implements CarService {
@@ -25,17 +27,12 @@ public class CarServiceImpl implements CarService {
     private final CarRequestMapper carRequestMapper;
     private final CacheManager cacheManager;
 
-    private static final String COMPANY_CACHE_NAME = "companies";
-    private static final String COMPANY_CACHE_KEY = "company:";
-    private static final String NOT_FOUND_MESSAGE = "Car with this id not found";
-
-
     @Override
     @Cacheable(value = "cars", key = "'car:' + #id", sync = true)
     public CarDto findById(Long id) {
         return carRepository.findById(id)
                 .map(carDtoMapper::map)
-                .orElseThrow(() -> new CarNotFoundException(NOT_FOUND_MESSAGE));
+                .orElseThrow(() -> new CarNotFoundException(CAR_NOT_FOUND_MESSAGE));
     }
 
     @Override
@@ -51,7 +48,7 @@ public class CarServiceImpl implements CarService {
     @CachePut(value = "cars", key = "'car:' + #id")
     public CarDto update(UpdateCarRequest updateCarRequest, Long id) {
         var car = carRepository.findById(id)
-                .orElseThrow(() -> new CarNotFoundException(NOT_FOUND_MESSAGE));
+                .orElseThrow(() -> new CarNotFoundException(CAR_NOT_FOUND_MESSAGE));
         car.setMark(updateCarRequest.mark())
                 .setMileage(updateCarRequest.mileage());
         car.getCompanies()
@@ -72,7 +69,7 @@ public class CarServiceImpl implements CarService {
     @CacheEvict(value = "cars", key = "'car:' + #id")
     public void deleteById(Long id) {
         var car = carRepository.findById(id)
-                .orElseThrow(() -> new CarNotFoundException(NOT_FOUND_MESSAGE));
+                .orElseThrow(() -> new CarNotFoundException(CAR_NOT_FOUND_MESSAGE));
         car.getCompanies()
                 .forEach(company -> {
                             var cache = cacheManager.getCache(COMPANY_CACHE_NAME);

@@ -14,6 +14,8 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import static by.ares.company_service.util.CompanyServiceConstants.COMPANY_NOT_FOUND_MESSAGE;
+
 @Service
 @RequiredArgsConstructor
 public class CompanyServiceImpl implements CompanyService {
@@ -28,7 +30,7 @@ public class CompanyServiceImpl implements CompanyService {
     public CompanyDto findById(Long id) {
         return companyRepository.findById(id)
                 .map(companyDtoMapper::map)
-                .orElseThrow(() -> new CompanyNotFoundException("Company with this id not found"));
+                .orElseThrow(() -> new CompanyNotFoundException(COMPANY_NOT_FOUND_MESSAGE));
     }
 
     @Override
@@ -42,7 +44,7 @@ public class CompanyServiceImpl implements CompanyService {
     @CachePut(value = "companies", key = "'company:' + #id")
     public CompanyDto update(UpdateCompanyRequest updateCompanyRequest, Long id) {
         var company = companyRepository.findById(id)
-                .orElseThrow(() -> new CompanyNotFoundException("Company with this id not found"));
+                .orElseThrow(() -> new CompanyNotFoundException(COMPANY_NOT_FOUND_MESSAGE));
         company.setCompanyName(updateCompanyRequest.companyName())
                 .setFullName(updateCompanyRequest.fullName())
                 .setAddress(updateCompanyRequest.address())
