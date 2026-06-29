@@ -7,7 +7,9 @@ import by.ares.company_service.exception.CarNotFoundException;
 import by.ares.company_service.mapper.CarDtoMapper;
 import by.ares.company_service.mapper.CarRequestMapper;
 import by.ares.company_service.model.Car;
+import by.ares.company_service.model.Company;
 import by.ares.company_service.repository.CarRepository;
+import by.ares.company_service.service.CacheEvictionService;
 import by.ares.company_service.service.impl.CarServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,19 +17,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 
 import java.util.Optional;
 
-import static by.ares.company_service.util.CompanyServiceConstants.COMPANY_CACHE_KEY;
 import static by.ares.company_service.util.TestConstants.EXISTING_CAR_ID;
 import static by.ares.company_service.util.TestConstants.NOT_EXISTING_CAR_ID;
 import static by.ares.company_service.util.TestModelsBuilder.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CarServiceImplTest {
@@ -39,9 +38,7 @@ class CarServiceImplTest {
     @Mock
     private CarRequestMapper carRequestMapper;
     @Mock
-    private Cache cache;
-    @Mock
-    private CacheManager cacheManager;
+    private CacheEvictionService<Company> cacheEvictionService;
 
     @InjectMocks
     private CarServiceImpl carService;
@@ -57,7 +54,6 @@ class CarServiceImplTest {
         carDto = buildCarDto();
         carCreationRequest = buildCarCreationRequest();
         updateCarRequest = buildUpdateCarRequest();
-        lenient().when(cacheManager.getCache(anyString())).thenReturn(cache);
     }
 
     @Test
@@ -97,10 +93,7 @@ class CarServiceImplTest {
         when(carDtoMapper.map(car)).thenReturn(carDto);
         var result = carService.update(updateCarRequest, EXISTING_CAR_ID);
         assertEquals(carDto.getMark(), result.getMark());
-        car.getCompanies()
-                .forEach(
-                        x -> verify(cache).evict(COMPANY_CACHE_KEY + x.getId())
-                );
+        verify(cacheEvictionService).evictAll(car.getCompanies());
         verify(carRepository).findById(EXISTING_CAR_ID);
         verify(carRepository).save(car);
         verify(carDtoMapper).map(car);
@@ -118,10 +111,7 @@ class CarServiceImplTest {
     void deleteById_shouldDeleteCar() {
         when(carRepository.findById(EXISTING_CAR_ID)).thenReturn(Optional.of(car));
         carService.deleteById(EXISTING_CAR_ID);
-        car.getCompanies()
-                .forEach(
-                        x -> verify(cache).evict(COMPANY_CACHE_KEY + x.getId())
-                );
+        verify(cacheEvictionService).evictAll(car.getCompanies());
         verify(carRepository).findById(EXISTING_CAR_ID);
         verify(carRepository).deleteById(EXISTING_CAR_ID);
     }
