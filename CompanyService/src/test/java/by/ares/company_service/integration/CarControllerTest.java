@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
+import java.util.HashSet;
+
 import static by.ares.company_service.util.TestConstants.*;
 import static by.ares.company_service.util.TestModelsBuilder.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -20,7 +22,9 @@ class CarControllerTest extends AbstractIntegrationTest {
     public CarRepository carRepository;
 
     private Car saveCar() {
-        return carRepository.save(buildCar().setId(null).setCompanies(null));
+        return carRepository.save(buildCar()
+                .setId(null)
+                .setCompanies(new HashSet<>()));
     }
 
     @Test

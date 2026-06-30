@@ -1,7 +1,7 @@
 package by.ares.company_service.service.impl;
 
 import by.ares.company_service.dto.CompanyDto;
-import by.ares.company_service.exception.CarNotFoundException;
+import by.ares.company_service.exception.CarDriverNotFoundException;
 import by.ares.company_service.exception.CompanyNotFoundException;
 import by.ares.company_service.mapper.CompanyDtoMapper;
 import by.ares.company_service.model.Company;
@@ -31,7 +31,7 @@ public class CompanyCarDriverServiceImpl implements CompanyCarDriverService {
         var company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new CompanyNotFoundException(COMPANY_NOT_FOUND_MESSAGE));
         var carDriver = carDriverRepository.findById(carDriverId)
-                .orElseThrow(() -> new CarNotFoundException(CAR_DRIVER_NOT_FOUND_MESSAGE));
+                .orElseThrow(() -> new CarDriverNotFoundException(CAR_DRIVER_NOT_FOUND_MESSAGE));
         company.addCarDriver(carDriver);
         cacheEvictionService.evict(company);
         return companyDtoMapper.map(companyRepository.save(company));
@@ -43,7 +43,7 @@ public class CompanyCarDriverServiceImpl implements CompanyCarDriverService {
         var company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new CompanyNotFoundException(COMPANY_NOT_FOUND_MESSAGE));
         var carDriver = carDriverRepository.findById(carDriverId)
-                .orElseThrow(() -> new CarNotFoundException(CAR_DRIVER_NOT_FOUND_MESSAGE));
+                .orElseThrow(() -> new CarDriverNotFoundException(CAR_DRIVER_NOT_FOUND_MESSAGE));
         company.removeCarDriver(carDriver);
         cacheEvictionService.evict(company);
         return companyDtoMapper.map(companyRepository.save(company));

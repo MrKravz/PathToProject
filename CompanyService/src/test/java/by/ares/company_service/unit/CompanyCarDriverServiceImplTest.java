@@ -2,6 +2,8 @@ package by.ares.company_service.unit;
 
 import by.ares.company_service.dto.CarDriverDto;
 import by.ares.company_service.dto.CompanyDto;
+import by.ares.company_service.exception.CarDriverNotFoundException;
+import by.ares.company_service.exception.CompanyNotFoundException;
 import by.ares.company_service.mapper.CompanyDtoMapper;
 import by.ares.company_service.model.CarDriver;
 import by.ares.company_service.model.Company;
@@ -56,7 +58,7 @@ class CompanyCarDriverServiceImplTest {
     }
 
     @Test
-    void assign() {
+    void assign_shouldReturnCompany() {
         when(carDriverRepository.findById(EXISTING_CAR_DRIVER_ID)).thenReturn(Optional.of(carDriver));
         when(companyRepository.findById(EXISTING_COMPANY_ID)).thenReturn(Optional.of(company));
         when(companyRepository.save(company)).thenReturn(company);
@@ -71,7 +73,25 @@ class CompanyCarDriverServiceImplTest {
     }
 
     @Test
-    void unassign() {
+    void assign_shouldThrowCompanyException() {
+        when(companyRepository.findById(NOT_EXISTING_COMPANY_ID)).thenReturn(Optional.empty());
+        assertThrows(CompanyNotFoundException.class, () ->
+                companyCarDriverService.assign(NOT_EXISTING_COMPANY_ID, EXISTING_CAR_DRIVER_ID));
+        verify(companyRepository).findById(NOT_EXISTING_COMPANY_ID);
+    }
+
+    @Test
+    void assign_shouldThrowCarDriverException() {
+        when(companyRepository.findById(EXISTING_COMPANY_ID)).thenReturn(Optional.of(company));
+        when(carDriverRepository.findById(NOT_EXISTING_CAR_DRIVER_ID)).thenReturn(Optional.empty());
+        assertThrows(CarDriverNotFoundException.class, () ->
+                companyCarDriverService.assign(EXISTING_COMPANY_ID, NOT_EXISTING_CAR_DRIVER_ID));
+        verify(companyRepository).findById(EXISTING_COMPANY_ID);
+        verify(carDriverRepository).findById(NOT_EXISTING_CAR_DRIVER_ID);
+    }
+
+    @Test
+    void unassign_shouldReturnCompany() {
         companyDto.setCarDrivers(new HashSet<>());
         when(carDriverRepository.findById(EXISTING_CAR_DRIVER_ID)).thenReturn(Optional.of(carDriver));
         when(companyRepository.findById(EXISTING_COMPANY_ID)).thenReturn(Optional.of(company));
@@ -84,6 +104,24 @@ class CompanyCarDriverServiceImplTest {
         verify(cacheEvictionService).evict(company);
         verify(companyRepository).save(company);
         verify(companyDtoMapper).map(company);
+    }
+
+    @Test
+    void unassign_shouldThrowCompanyException() {
+        when(companyRepository.findById(NOT_EXISTING_COMPANY_ID)).thenReturn(Optional.empty());
+        assertThrows(CompanyNotFoundException.class, () ->
+                companyCarDriverService.unassign(NOT_EXISTING_COMPANY_ID, EXISTING_CAR_DRIVER_ID));
+        verify(companyRepository).findById(NOT_EXISTING_COMPANY_ID);
+    }
+
+    @Test
+    void unassign_shouldThrowCarDriverException() {
+        when(companyRepository.findById(EXISTING_COMPANY_ID)).thenReturn(Optional.of(company));
+        when(carDriverRepository.findById(NOT_EXISTING_CAR_DRIVER_ID)).thenReturn(Optional.empty());
+        assertThrows(CarDriverNotFoundException.class, () ->
+                companyCarDriverService.unassign(EXISTING_COMPANY_ID, NOT_EXISTING_CAR_DRIVER_ID));
+        verify(companyRepository).findById(EXISTING_COMPANY_ID);
+        verify(carDriverRepository).findById(NOT_EXISTING_CAR_DRIVER_ID);
     }
 
 }
