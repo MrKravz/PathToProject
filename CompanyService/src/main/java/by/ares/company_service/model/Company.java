@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -48,10 +49,10 @@ public class Company {
     private Long version = 0L;
 
     @ManyToMany(mappedBy = "companies")
-    private Set<Car> cars;
+    private Set<Car> cars = new HashSet<>();
 
     @ManyToMany(mappedBy = "companies")
-    private Set<CarDriver> carDrivers;
+    private Set<CarDriver> carDrivers = new HashSet<>();
 
     @Column(name = "created_at")
     @CreatedDate

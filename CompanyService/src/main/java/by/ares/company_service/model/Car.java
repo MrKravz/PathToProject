@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -49,7 +50,7 @@ public class Car {
                     referencedColumnName = "id"
             )
     )
-    private Set<Company> companies;
+    private Set<Company> companies = new HashSet<>();
 
     @Column(name = "created_at")
     @CreatedDate
