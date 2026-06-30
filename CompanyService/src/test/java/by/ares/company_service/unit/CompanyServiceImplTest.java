@@ -9,7 +9,6 @@ import by.ares.company_service.mapper.CompanyRequestMapper;
 import by.ares.company_service.model.Company;
 import by.ares.company_service.repository.CompanyRepository;
 import by.ares.company_service.service.impl.CompanyServiceImpl;
-import by.ares.company_service.util.TestModelsBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +20,7 @@ import java.util.Optional;
 
 import static by.ares.company_service.util.TestConstants.EXISTING_COMPANY_ID;
 import static by.ares.company_service.util.TestConstants.NOT_EXISTING_COMPANY_ID;
+import static by.ares.company_service.util.TestModelsBuilder.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
@@ -46,10 +46,10 @@ class CompanyServiceImplTest {
 
     @BeforeEach
     void init() {
-        company = TestModelsBuilder.buildCompany();
-        companyDto = TestModelsBuilder.buildCompanyDto();
-        companyCreationRequest = TestModelsBuilder.buildCompanyCreationRequest();
-        updateCompanyRequest = TestModelsBuilder.buildUpdateCompanyRequest();
+        company = buildCompany();
+        companyDto = buildCompanyDto();
+        companyCreationRequest = buildCompanyCreationRequest();
+        updateCompanyRequest = buildUpdateCompanyRequest();
     }
 
     @Test

@@ -8,7 +8,7 @@ import by.ares.company_service.model.Car;
 import by.ares.company_service.model.CarDriver;
 import by.ares.company_service.model.Company;
 
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import static by.ares.company_service.util.TestConstants.*;
@@ -53,8 +53,8 @@ public class TestModelsBuilder {
                 .companyName(COMPANY_NAME)
                 .address(COMPANY_ADDRESS)
                 .phoneNumber(COMPANY_PHONE_NUMBER)
-                .cars(Collections.emptySet())
-                .carDrivers(Collections.emptySet())
+                .cars(new HashSet<>())
+                .carDrivers(new HashSet<>())
                 .build();
     }
 
@@ -66,8 +66,8 @@ public class TestModelsBuilder {
                 .companyName(COMPANY_NAME)
                 .address(COMPANY_ADDRESS)
                 .phoneNumber(COMPANY_ADDRESS)
-                .cars(Collections.emptySet())
-                .carDrivers(Collections.emptySet())
+                .cars(new HashSet<>())
+                .carDrivers(new HashSet<>())
                 .build();
     }
 
@@ -111,8 +111,10 @@ public class TestModelsBuilder {
     }
 
     public static Set<Company> mockCompanies() {
-        return Set.of(new Company().setId(EXISTING_COMPANY_ID),
-                new Company().setId(NOT_EXISTING_COMPANY_ID));
+        var companies = new HashSet<Company>();
+        companies.add(new Company().setId(EXISTING_COMPANY_ID));
+        companies.add(new Company().setId(NOT_EXISTING_COMPANY_ID));
+        return companies;
     }
 
 }
