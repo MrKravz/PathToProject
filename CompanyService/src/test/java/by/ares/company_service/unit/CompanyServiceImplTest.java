@@ -16,13 +16,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static by.ares.company_service.util.TestConstants.EXISTING_COMPANY_ID;
 import static by.ares.company_service.util.TestConstants.NOT_EXISTING_COMPANY_ID;
 import static by.ares.company_service.util.TestModelsBuilder.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -50,6 +50,18 @@ class CompanyServiceImplTest {
         companyDto = buildCompanyDto();
         companyCreationRequest = buildCompanyCreationRequest();
         updateCompanyRequest = buildUpdateCompanyRequest();
+    }
+
+    @Test
+    void findAllById_shouldReturnCompanyList() {
+        when(companyRepository.findAllById(List.of(EXISTING_COMPANY_ID)))
+                .thenReturn(List.of(company));
+        when(companyDtoMapper.map(company)).thenReturn(companyDto);
+        var result = companyService.findAllById(List.of(EXISTING_COMPANY_ID));
+        assertTrue(result.contains(companyDto));
+        assertEquals(1, (long) result.size());
+        verify(companyRepository).findAllById(List.of(EXISTING_COMPANY_ID));
+        verify(companyDtoMapper).map(company);
     }
 
     @Test

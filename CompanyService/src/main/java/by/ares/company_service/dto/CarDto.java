@@ -1,5 +1,6 @@
 package by.ares.company_service.dto;
 
+import by.ares.company_service.model.CarType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,4 +15,5 @@ public class CarDto {
     private String mark;
     private String residentNumber;
     private Integer mileage;
+    private CarType carType;
 }

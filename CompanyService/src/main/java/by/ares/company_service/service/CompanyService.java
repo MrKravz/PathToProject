@@ -4,7 +4,11 @@ import by.ares.company_service.dto.CompanyDto;
 import by.ares.company_service.dto.request.CompanyCreationRequest;
 import by.ares.company_service.dto.request.UpdateCompanyRequest;
 
+import java.util.List;
+
 public interface CompanyService {
+
+    List<CompanyDto> findAllById(List<Long> ids);
 
     CompanyDto findById(Long id);
 

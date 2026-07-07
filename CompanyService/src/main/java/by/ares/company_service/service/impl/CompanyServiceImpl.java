@@ -14,6 +14,8 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static by.ares.company_service.util.CompanyServiceConstants.COMPANY_NOT_FOUND_MESSAGE;
 
 @Service
@@ -24,6 +26,14 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyDtoMapper companyDtoMapper;
     private final CompanyRequestMapper companyRequestMapper;
 
+
+    @Override
+    public List<CompanyDto> findAllById(List<Long> ids) {
+        return companyRepository.findAllById(ids)
+                .stream()
+                .map(companyDtoMapper::map)
+                .toList();
+    }
 
     @Override
     @Cacheable(value = "companies", key = "'company:' + #id", sync = true)

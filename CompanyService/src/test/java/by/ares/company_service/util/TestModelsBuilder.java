@@ -103,11 +103,12 @@ public class TestModelsBuilder {
     }
 
     public static UpdateCarRequest buildUpdateCarRequest() {
-        return new UpdateCarRequest(CAR_MARK, UPDATED_CAR_MILEAGE);
+        return new UpdateCarRequest(CAR_MARK, UPDATED_CAR_MILEAGE, CAR_TYPE);
     }
 
     public static CarCreationRequest buildCarCreationRequest() {
-        return new CarCreationRequest(CAR_MARK, CAR_RESIDENT_NUMBER, CAR_MILEAGE);
+        return new CarCreationRequest(CAR_MARK, CAR_RESIDENT_NUMBER,
+                CAR_MILEAGE, CAR_TYPE);
     }
 
     public static Set<Company> mockCompanies() {
