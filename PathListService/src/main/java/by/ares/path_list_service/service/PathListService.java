@@ -1,6 +1,6 @@
 package by.ares.path_list_service.service;
 
-import by.ares.path_list_service.dto.PathListCreationRequest;
+import by.ares.path_list_service.dto.request.PathListCreationRequest;
 import by.ares.path_list_service.dto.PathListDto;
 import by.ares.path_list_service.dto.SeriaDto;
 import org.springframework.data.domain.Page;

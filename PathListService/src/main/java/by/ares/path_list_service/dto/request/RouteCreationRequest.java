@@ -1,4 +1,4 @@
-package by.ares.path_list_service.dto;
+package by.ares.path_list_service.dto.request;
 
 import by.ares.path_list_service.model.TransportationType;
 

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -14,4 +15,10 @@ public class CarDto {
     private String mark;
     private String residentNumber;
     private Integer mileage;
+    private CarType carType;
+
+    enum CarType {
+        CAR, TRUCK, BUS, ARMY_VEHICLE
+    }
+    
 }
