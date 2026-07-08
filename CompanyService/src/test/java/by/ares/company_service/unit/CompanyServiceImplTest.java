@@ -8,6 +8,7 @@ import by.ares.company_service.mapper.CompanyDtoMapper;
 import by.ares.company_service.mapper.CompanyRequestMapper;
 import by.ares.company_service.model.Company;
 import by.ares.company_service.repository.CompanyRepository;
+import by.ares.company_service.service.CompanyCacheService;
 import by.ares.company_service.service.impl.CompanyServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +37,8 @@ class CompanyServiceImplTest {
     private CompanyDtoMapper companyDtoMapper;
     @Mock
     private CompanyRequestMapper companyRequestMapper;
+    @Mock
+    private CompanyCacheService companyCacheService;
 
     @InjectMocks
     private CompanyServiceImpl companyService;
@@ -54,14 +58,20 @@ class CompanyServiceImplTest {
 
     @Test
     void findAllById_shouldReturnCompanyList() {
-        when(companyRepository.findAllById(List.of(EXISTING_COMPANY_ID)))
+        List<Long> requestIds = List.of(EXISTING_COMPANY_ID);
+        when(companyCacheService.getAllById(requestIds))
+                .thenReturn(Collections.emptyList());
+        when(companyRepository.findAllById(requestIds))
                 .thenReturn(List.of(company));
-        when(companyDtoMapper.map(company)).thenReturn(companyDto);
-        var result = companyService.findAllById(List.of(EXISTING_COMPANY_ID));
+        when(companyDtoMapper.map(company))
+                .thenReturn(companyDto);
+        var result = companyService.findAllById(requestIds);
         assertTrue(result.contains(companyDto));
         assertEquals(1, (long) result.size());
-        verify(companyRepository).findAllById(List.of(EXISTING_COMPANY_ID));
+        verify(companyCacheService).getAllById(requestIds);
+        verify(companyRepository).findAllById(requestIds);
         verify(companyDtoMapper).map(company);
+        verify(companyCacheService).putAll(List.of(companyDto));
     }
 
     @Test

@@ -39,7 +39,7 @@ class CompanyCarServiceImplTest {
     @Mock
     private CompanyDtoMapper companyDtoMapper;
     @Mock
-    private CacheEvictionService<Company> cacheEvictionService;
+    private CacheEvictionService<Long> cacheEvictionService;
 
     @InjectMocks
     private CompanyCarServiceImpl companyCarServiceImpl;
@@ -67,7 +67,7 @@ class CompanyCarServiceImplTest {
         assertEquals(companyDto.getCars().size(), result.getCars().size());
         verify(carRepository).findById(EXISTING_CAR_ID);
         verify(companyRepository).findById(EXISTING_COMPANY_ID);
-        verify(cacheEvictionService).evict(company);
+        verify(cacheEvictionService).evict(company.getId());
         verify(companyRepository).save(company);
         verify(companyDtoMapper).map(company);
     }
@@ -101,7 +101,7 @@ class CompanyCarServiceImplTest {
         assertEquals(0, result.getCars().size());
         verify(carRepository).findById(EXISTING_CAR_ID);
         verify(companyRepository).findById(EXISTING_COMPANY_ID);
-        verify(cacheEvictionService).evict(company);
+        verify(cacheEvictionService).evict(company.getId());
         verify(companyRepository).save(company);
         verify(companyDtoMapper).map(company);
     }

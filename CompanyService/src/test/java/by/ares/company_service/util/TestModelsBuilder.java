@@ -118,4 +118,11 @@ public class TestModelsBuilder {
         return companies;
     }
 
+    public static Set<CompanyDto> mockCompaniesDto() {
+        var companies = new HashSet<CompanyDto>();
+        companies.add(CompanyDto.builder().id(EXISTING_COMPANY_ID).build());
+        companies.add(CompanyDto.builder().id(NOT_EXISTING_COMPANY_ID).build());
+        return companies;
+    }
+
 }
