@@ -1,4 +1,4 @@
-package by.ares.company_service.exception;
+package by.ares.company_service.exception.handler;
 
 import by.ares.company_service.dto.ExceptionResponse;
 import jakarta.validation.ConstraintViolationException;

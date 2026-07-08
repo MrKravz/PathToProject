@@ -17,7 +17,9 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import static by.ares.company_service.util.CompanyServiceConstants.*;
+import java.util.stream.Collectors;
+
+import static by.ares.company_service.util.CompanyServiceConstants.CAR_DRIVER_NOT_FOUND_MESSAGE;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +28,7 @@ public class CarDriverServiceImpl implements CarDriverService {
     private final CarDriverRepository carDriverRepository;
     private final CarDriverRequestMapper carDriverRequestMapper;
     private final CarDriverDtoMapper carDriverDtoMapper;
-    private final CacheEvictionService<Company> cacheEvictionService;
+    private final CacheEvictionService<Long> cacheEvictionService;
 
     @Override
     @Cacheable(value = "car_drivers", key = "'car_driver:' + #id", sync = true)
@@ -53,7 +55,10 @@ public class CarDriverServiceImpl implements CarDriverService {
         carDriver.setName(updateCarDriverRequest.name())
                 .setSurname(updateCarDriverRequest.surname())
                 .setLastname(updateCarDriverRequest.lastname());
-        cacheEvictionService.evictAll(carDriver.getCompanies());
+        cacheEvictionService.evictAll(carDriver.getCompanies()
+                .stream()
+                .map(Company::getId)
+                .collect(Collectors.toSet()));
         return carDriverDtoMapper.map(
                 carDriverRepository.save(carDriver)
         );
@@ -65,7 +70,10 @@ public class CarDriverServiceImpl implements CarDriverService {
     public void deleteById(Long id) {
         var carDriver = carDriverRepository.findById(id)
                 .orElseThrow(() -> new CarDriverNotFoundException(CAR_DRIVER_NOT_FOUND_MESSAGE));
-        cacheEvictionService.evictAll(carDriver.getCompanies());
+        cacheEvictionService.evictAll(carDriver.getCompanies()
+                .stream()
+                .map(Company::getId)
+                .collect(Collectors.toSet()));
         carDriverRepository.deleteById(id);
     }
 }

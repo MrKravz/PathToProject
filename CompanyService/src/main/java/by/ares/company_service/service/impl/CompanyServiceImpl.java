@@ -7,6 +7,7 @@ import by.ares.company_service.exception.CompanyNotFoundException;
 import by.ares.company_service.mapper.CompanyDtoMapper;
 import by.ares.company_service.mapper.CompanyRequestMapper;
 import by.ares.company_service.repository.CompanyRepository;
+import by.ares.company_service.service.CompanyCacheService;
 import by.ares.company_service.service.CompanyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -14,7 +15,11 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static by.ares.company_service.util.CompanyServiceConstants.COMPANY_NOT_FOUND_MESSAGE;
 
@@ -25,14 +30,32 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     private final CompanyDtoMapper companyDtoMapper;
     private final CompanyRequestMapper companyRequestMapper;
+    private final CompanyCacheService companyCacheService;
 
 
     @Override
     public List<CompanyDto> findAllById(List<Long> ids) {
-        return companyRepository.findAllById(ids)
+        if (ids == null || ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<CompanyDto> cachedCompanies = companyCacheService.getAllById(ids);
+        Set<Long> cachedIds = cachedCompanies.stream()
+                .map(CompanyDto::getId)
+                .collect(Collectors.toSet());
+        List<Long> uncachedIds = ids.stream()
+                .filter(id -> !cachedIds.contains(id))
+                .toList();
+        if (uncachedIds.isEmpty()) {
+            return cachedCompanies;
+        }
+        List<CompanyDto> dbResults = companyRepository.findAllById(uncachedIds)
                 .stream()
                 .map(companyDtoMapper::map)
                 .toList();
+        companyCacheService.putAll(dbResults);
+        List<CompanyDto> finalResult = new ArrayList<>(cachedCompanies);
+        finalResult.addAll(dbResults);
+        return finalResult;
     }
 
     @Override
@@ -69,4 +92,5 @@ public class CompanyServiceImpl implements CompanyService {
     public void deleteById(Long id) {
         companyRepository.deleteById(id);
     }
+
 }

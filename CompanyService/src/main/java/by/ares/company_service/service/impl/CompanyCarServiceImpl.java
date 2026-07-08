@@ -4,7 +4,6 @@ import by.ares.company_service.dto.CompanyDto;
 import by.ares.company_service.exception.CarNotFoundException;
 import by.ares.company_service.exception.CompanyNotFoundException;
 import by.ares.company_service.mapper.CompanyDtoMapper;
-import by.ares.company_service.model.Company;
 import by.ares.company_service.repository.CarRepository;
 import by.ares.company_service.repository.CompanyRepository;
 import by.ares.company_service.service.CacheEvictionService;
@@ -23,7 +22,7 @@ public class CompanyCarServiceImpl implements CompanyCarService {
     private final CompanyRepository companyRepository;
     private final CarRepository carRepository;
     private final CompanyDtoMapper companyDtoMapper;
-    private final CacheEvictionService<Company> cacheEvictionService;
+    private final CacheEvictionService<Long> cacheEvictionService;
 
     @Override
     @Transactional
@@ -33,7 +32,7 @@ public class CompanyCarServiceImpl implements CompanyCarService {
         var car = carRepository.findById(carId)
                 .orElseThrow(() -> new CarNotFoundException(CAR_NOT_FOUND_MESSAGE));
         company.addCar(car);
-        cacheEvictionService.evict(company);
+        cacheEvictionService.evict(company.getId());
         return companyDtoMapper.map(companyRepository.save(company));
     }
 
@@ -45,7 +44,7 @@ public class CompanyCarServiceImpl implements CompanyCarService {
         var car = carRepository.findById(carId)
                 .orElseThrow(() -> new CarNotFoundException(CAR_NOT_FOUND_MESSAGE));
         company.removeCar(car);
-        cacheEvictionService.evict(company);
+        cacheEvictionService.evict(company.getId());
         return companyDtoMapper.map(companyRepository.save(company));
     }
 
