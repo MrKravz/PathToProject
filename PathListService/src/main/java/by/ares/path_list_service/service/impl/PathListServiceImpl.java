@@ -12,6 +12,7 @@ import by.ares.path_list_service.client.CarClient;
 import by.ares.path_list_service.client.CarDriverClient;
 import by.ares.path_list_service.client.CompanyClient;
 import by.ares.path_list_service.service.PathListService;
+import by.ares.path_list_service.service.RouteService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -37,6 +38,7 @@ public class PathListServiceImpl implements PathListService {
     private final CompanyClient companyClient;
     private final CarClient carClient;
     private final CarDriverClient carDriverClient;
+    private final RouteService routeService;
 
     @Override
     public Page<PathListDto> findAllBySeria(SeriaDto seria, Pageable pageable) {
@@ -74,9 +76,10 @@ public class PathListServiceImpl implements PathListService {
         var carDto = carClient.findById(pathListCreationRequest.carId());
         var carDriverDto = carDriverClient.findById(pathListCreationRequest.carDriverId());
         var companyDto = companyClient.findById(pathListCreationRequest.companyId());
-        var pathListDto = pathListDtoMapper.map(
-                pathListRepository.save(pathListRequestMapper.map(pathListCreationRequest))
-        );
+        var route = routeService.save(pathListCreationRequest.routeCreationRequest());
+        var pathList = pathListRequestMapper.map(pathListCreationRequest);
+        pathList.setRoute(route);
+        var pathListDto =  pathListDtoMapper.map(pathListRepository.save(pathList));
         pathListDto.setCompanyDto(companyDto);
         pathListDto.setCarDto(carDto);
         pathListDto.setCarDriverDto(carDriverDto);
