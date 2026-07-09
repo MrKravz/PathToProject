@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class CarExceptionHandler {
     @ExceptionHandler(value = CarNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handlePaymentCardNotFoundException(CarNotFoundException ex) {
+    public ResponseEntity<ExceptionResponse> handleCarNotFoundException(CarNotFoundException ex) {
         log.error(ex.getMessage(), ex);
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)

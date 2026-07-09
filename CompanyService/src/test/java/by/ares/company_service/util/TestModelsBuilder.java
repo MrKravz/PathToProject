@@ -65,7 +65,7 @@ public class TestModelsBuilder {
                 .fullName(COMPANY_FULL_NAME)
                 .companyName(COMPANY_NAME)
                 .address(COMPANY_ADDRESS)
-                .phoneNumber(COMPANY_ADDRESS)
+                .phoneNumber(COMPANY_PHONE_NUMBER)
                 .cars(new HashSet<>())
                 .carDrivers(new HashSet<>())
                 .build();

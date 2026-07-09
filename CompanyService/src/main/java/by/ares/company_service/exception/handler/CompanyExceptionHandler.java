@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class CompanyExceptionHandler {
     @ExceptionHandler(value = CompanyNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handlePaymentCardNotFoundException(CompanyNotFoundException ex) {
+    public ResponseEntity<ExceptionResponse> handleCompanyExceptionHandler(CompanyNotFoundException ex) {
         log.error(ex.getMessage(), ex);
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
