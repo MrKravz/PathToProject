@@ -24,7 +24,8 @@ public class CompanyController {
     private final CompanyService companyService;
 
     @GetMapping
-    public ResponseEntity<List<CompanyDto>> findAllById(@RequestParam @NotEmpty(message = "The list of IDs cannot be empty")
+    public ResponseEntity<List<CompanyDto>> findAllById(@RequestParam
+                                                        @NotEmpty(message = "The list of IDs cannot be empty")
                                                         List<@Min(1) Long> ids) {
         return ResponseEntity.ok(companyService.findAllById(ids));
     }

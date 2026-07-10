@@ -9,11 +9,9 @@ public record CompanyCreationRequest(
         @Size(max = 50, message = "Identifier must not exceed 50 characters")
         String identifier,
 
-        @NotBlank(message = "Company name cannot be blank")
         @Size(max = 100, message = "Company name must not exceed 100 characters")
         String companyName,
 
-        @NotBlank(message = "Full name cannot be blank")
         @Size(max = 255, message = "Full name must not exceed 255 characters")
         String fullName,
 
