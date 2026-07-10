@@ -18,7 +18,7 @@ public class TestModelsBuilder {
     public static Seria buildSeria() {
         return Seria.builder()
                 .id(SERIA_ID)
-                .name(EXISTING_SERIA_NAME)
+                .name(SERIA_NAME)
                 .pathLists(new HashSet<>())
                 .build();
     }
@@ -26,12 +26,12 @@ public class TestModelsBuilder {
     public static SeriaDto buildSeriaDto() {
         return SeriaDto.builder()
                 .id(SERIA_ID)
-                .name(EXISTING_SERIA_NAME)
+                .name(SERIA_NAME)
                 .build();
     }
 
     public static SeriaCreationRequest buildSeriaCreationRequest() {
-        return new SeriaCreationRequest(EXISTING_SERIA_NAME);
+        return new SeriaCreationRequest(SERIA_NAME);
     }
 
     public static CarDto buildCarDto() {
@@ -71,8 +71,8 @@ public class TestModelsBuilder {
                 .id(EXISTING_PATH_LIST_ID)
                 .number(PATH_LIST_NUMBER)
                 .reclamationDate(PATH_LIST_RECLAMATION_DATE)
-                .seriaDto(buildSeriaDto())
-                .routeDto(buildRouteDto())
+                .seria(buildSeriaDto())
+                .route(buildRouteDto())
                 .carDto(buildCarDto())
                 .carDriverDto(buildCarDriverDto())
                 .companyDto(buildCompanyDto(buildCarDto(), buildCarDriverDto()))

@@ -8,7 +8,7 @@ import java.util.UUID;
 public class TestConstants {
 
     public static final Integer SERIA_ID = 1;
-    public static final String EXISTING_SERIA_NAME = "УН";
+    public static final String SERIA_NAME = "УН";
     public static final String NOT_EXISTING_SERIA_NAME = "sd";
     public static final Long EXISTING_CAR_ID = 1L;
     public static final String CAR_MARK = "Mercedes-Benz";

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static by.ares.path_list_service.util.TestConstants.EXISTING_SERIA_NAME;
+import static by.ares.path_list_service.util.TestConstants.SERIA_NAME;
 import static by.ares.path_list_service.util.TestConstants.NOT_EXISTING_SERIA_NAME;
 import static by.ares.path_list_service.util.TestModelsBuilder.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -62,12 +62,12 @@ class SeriaServiceImplTest {
 
     @Test
     void findByName_Success() {
-        when(seriaRepository.findByName(EXISTING_SERIA_NAME)).thenReturn(Optional.of(seria));
+        when(seriaRepository.findByName(SERIA_NAME)).thenReturn(Optional.of(seria));
         when(seriaDtoMapper.map(seria)).thenReturn(seriaDto);
-        SeriaDto result = seriaService.findByName(EXISTING_SERIA_NAME);
+        SeriaDto result = seriaService.findByName(SERIA_NAME);
         assertNotNull(result);
         assertEquals(seriaDto, result);
-        verify(seriaRepository).findByName(EXISTING_SERIA_NAME);
+        verify(seriaRepository).findByName(SERIA_NAME);
         verify(seriaDtoMapper).map(seria);
     }
 

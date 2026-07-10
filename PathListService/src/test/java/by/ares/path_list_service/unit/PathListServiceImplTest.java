@@ -7,14 +7,13 @@ import by.ares.path_list_service.dto.*;
 import by.ares.path_list_service.dto.request.PathListCreationRequest;
 import by.ares.path_list_service.dto.request.RouteCreationRequest;
 import by.ares.path_list_service.exception.PathListNotFoundException;
-import by.ares.path_list_service.mapper.PathListDtoMapper;
-import by.ares.path_list_service.mapper.PathListRequestMapper;
-import by.ares.path_list_service.mapper.RouteRequestMapper;
-import by.ares.path_list_service.mapper.SeriaDtoMapper;
+import by.ares.path_list_service.mapper.*;
 import by.ares.path_list_service.model.PathList;
 import by.ares.path_list_service.model.Route;
 import by.ares.path_list_service.model.Seria;
 import by.ares.path_list_service.repository.PathListRepository;
+import by.ares.path_list_service.repository.SeriaRepository;
+import by.ares.path_list_service.service.RouteService;
 import by.ares.path_list_service.service.impl.PathListServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +32,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static by.ares.path_list_service.util.PathListServiceConstants.*;
+import static by.ares.path_list_service.util.TestConstants.SERIA_ID;
 import static by.ares.path_list_service.util.TestModelsBuilder.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -56,7 +56,11 @@ class PathListServiceImplTest {
     @Mock
     private CarDriverClient carDriverClient;
     @Mock
-    private RouteRequestMapper routeRequestMapper;
+    private  RouteService routeService;
+    @Mock
+    private SeriaRepository seriaRepository;
+    @Mock
+    private RouteDtoMapper routeDtoMapper;
 
     @InjectMocks
     private PathListServiceImpl pathListService;
@@ -68,6 +72,7 @@ class PathListServiceImplTest {
 
     private SeriaDto seriaDto;
     private Route route;
+    private RouteDto routeDto;
     private RouteCreationRequest routeCreationRequest;
     private CompanyDto companyDto;
     private CarDto carDto;
@@ -79,6 +84,7 @@ class PathListServiceImplTest {
         seria = buildSeria();
         seriaDto = buildSeriaDto();
         route = buildRoute();
+        routeDto = buildRouteDto();
         routeCreationRequest = buildRouteCreationRequest();
         carDto = buildCarDto();
         carDriverDto = buildCarDriverDto();
@@ -142,14 +148,17 @@ class PathListServiceImplTest {
     }
 
     @Test
-    void save() {
+    void save_Success() {
         when(carClient.findById(CAR_ID)).thenReturn(carDto);
         when(carDriverClient.findById(CAR_DRIVER_ID)).thenReturn(carDriverDto);
         when(companyClient.findById(COMPANY_ID)).thenReturn(companyDto);
         when(pathListRequestMapper.map(pathListCreationRequest)).thenReturn(pathList);
-        when(routeRequestMapper.map(routeCreationRequest)).thenReturn(route);
+        when(routeService.save(routeCreationRequest)).thenReturn(route);
+        when(seriaRepository.findById(SERIA_ID)).thenReturn(Optional.of(seria));
         when(pathListRepository.save(pathList)).thenReturn(pathList);
         when(pathListDtoMapper.map(pathList)).thenReturn(pathListDto);
+        when(routeDtoMapper.map(route)).thenReturn(routeDto);
+        when(seriaDtoMapper.map(seria)).thenReturn(seriaDto);
         PathListDto result = pathListService.save(pathListCreationRequest);
         assertNotNull(result);
         assertEquals(pathListDto, result);
@@ -157,8 +166,29 @@ class PathListServiceImplTest {
         verify(carDriverClient).findById(CAR_DRIVER_ID);
         verify(companyClient).findById(COMPANY_ID);
         verify(pathListRequestMapper).map(pathListCreationRequest);
+        verify(routeService).save(routeCreationRequest);
+        verify(seriaRepository).findById(SERIA_ID);
         verify(pathListRepository).save(pathList);
         verify(pathListDtoMapper).map(pathList);
+        verify(routeDtoMapper).map(route);
+        verify(seriaDtoMapper).map(seria);
+    }
+
+    @Test
+    void save_WhenSeriaNotFound_ThrowsException() {
+        when(carClient.findById(CAR_ID)).thenReturn(carDto);
+        when(carDriverClient.findById(CAR_DRIVER_ID)).thenReturn(carDriverDto);
+        when(companyClient.findById(COMPANY_ID)).thenReturn(companyDto);
+        when(pathListRequestMapper.map(pathListCreationRequest)).thenReturn(pathList);
+        when(routeService.save(routeCreationRequest)).thenReturn(route);
+        when(seriaRepository.findById(SERIA_ID)).thenReturn(Optional.empty());
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+                pathListService.save(pathListCreationRequest));
+        assertEquals("Seria not found", exception.getMessage());
+        verify(pathListRepository, never()).save(any());
+        verify(pathListDtoMapper, never()).map(any());
+        verify(routeDtoMapper, never()).map(any());
+        verify(seriaDtoMapper, never()).map(any());
     }
 
 }
