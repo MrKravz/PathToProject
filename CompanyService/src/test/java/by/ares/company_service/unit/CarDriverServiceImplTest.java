@@ -20,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static by.ares.company_service.util.TestConstants.EXISTING_CAR_DRIVER_ID;
 import static by.ares.company_service.util.TestConstants.NOT_EXISTING_CAR_DRIVER_ID;
@@ -38,7 +39,7 @@ class CarDriverServiceImplTest {
     @Mock
     private CarDriverDtoMapper carDriverDtoMapper;
     @Mock
-    private CacheEvictionService<Company> cacheEvictionService;
+    private CacheEvictionService<Long> cacheEvictionService;
 
     @InjectMocks
     private CarDriverServiceImpl carDriverService;
@@ -92,7 +93,10 @@ class CarDriverServiceImplTest {
         when(carDriverDtoMapper.map(carDriver)).thenReturn(carDriverDto);
         var result = carDriverService.update(updateCarDriverRequest, EXISTING_CAR_DRIVER_ID);
         assertEquals(carDriverDto.getLastname(), result.getLastname());
-        verify(cacheEvictionService).evictAll(carDriver.getCompanies());
+        verify(cacheEvictionService).evictAll(carDriver.getCompanies()
+                .stream()
+                .map(Company::getId)
+                .collect(Collectors.toSet()));
         verify(carDriverRepository).findById(EXISTING_CAR_DRIVER_ID);
         verify(carDriverRepository).save(carDriver);
         verify(carDriverDtoMapper).map(carDriver);
@@ -110,7 +114,10 @@ class CarDriverServiceImplTest {
     void deleteById_shouldDeleteCarDriver() {
         when(carDriverRepository.findById(EXISTING_CAR_DRIVER_ID)).thenReturn(Optional.of(carDriver));
         carDriverService.deleteById(EXISTING_CAR_DRIVER_ID);
-        verify(cacheEvictionService).evictAll(carDriver.getCompanies());
+        verify(cacheEvictionService).evictAll(carDriver.getCompanies()
+                .stream()
+                .map(Company::getId)
+                .collect(Collectors.toSet()));
         verify(carDriverRepository).findById(EXISTING_CAR_DRIVER_ID);
         verify(carDriverRepository).deleteById(EXISTING_CAR_DRIVER_ID);
     }

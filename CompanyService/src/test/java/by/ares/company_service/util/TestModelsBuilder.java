@@ -65,7 +65,7 @@ public class TestModelsBuilder {
                 .fullName(COMPANY_FULL_NAME)
                 .companyName(COMPANY_NAME)
                 .address(COMPANY_ADDRESS)
-                .phoneNumber(COMPANY_ADDRESS)
+                .phoneNumber(COMPANY_PHONE_NUMBER)
                 .cars(new HashSet<>())
                 .carDrivers(new HashSet<>())
                 .build();
@@ -103,17 +103,25 @@ public class TestModelsBuilder {
     }
 
     public static UpdateCarRequest buildUpdateCarRequest() {
-        return new UpdateCarRequest(CAR_MARK, UPDATED_CAR_MILEAGE);
+        return new UpdateCarRequest(CAR_MARK, UPDATED_CAR_MILEAGE, CAR_TYPE);
     }
 
     public static CarCreationRequest buildCarCreationRequest() {
-        return new CarCreationRequest(CAR_MARK, CAR_RESIDENT_NUMBER, CAR_MILEAGE);
+        return new CarCreationRequest(CAR_MARK, CAR_RESIDENT_NUMBER,
+                CAR_MILEAGE, CAR_TYPE);
     }
 
     public static Set<Company> mockCompanies() {
         var companies = new HashSet<Company>();
         companies.add(new Company().setId(EXISTING_COMPANY_ID));
         companies.add(new Company().setId(NOT_EXISTING_COMPANY_ID));
+        return companies;
+    }
+
+    public static Set<CompanyDto> mockCompaniesDto() {
+        var companies = new HashSet<CompanyDto>();
+        companies.add(CompanyDto.builder().id(EXISTING_COMPANY_ID).build());
+        companies.add(CompanyDto.builder().id(NOT_EXISTING_COMPANY_ID).build());
         return companies;
     }
 

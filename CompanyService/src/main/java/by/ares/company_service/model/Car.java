@@ -38,6 +38,10 @@ public class Car {
     @Column(name = "mileage")
     private Integer mileage;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "car_type")
+    private CarType carType;
+
     @ManyToMany
     @JoinTable(
             name = "company_cars",

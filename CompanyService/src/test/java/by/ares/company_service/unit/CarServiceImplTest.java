@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static by.ares.company_service.util.TestConstants.EXISTING_CAR_ID;
 import static by.ares.company_service.util.TestConstants.NOT_EXISTING_CAR_ID;
@@ -38,7 +39,7 @@ class CarServiceImplTest {
     @Mock
     private CarRequestMapper carRequestMapper;
     @Mock
-    private CacheEvictionService<Company> cacheEvictionService;
+    private CacheEvictionService<Long> cacheEvictionService;
 
     @InjectMocks
     private CarServiceImpl carService;
@@ -93,7 +94,10 @@ class CarServiceImplTest {
         when(carDtoMapper.map(car)).thenReturn(carDto);
         var result = carService.update(updateCarRequest, EXISTING_CAR_ID);
         assertEquals(carDto.getMark(), result.getMark());
-        verify(cacheEvictionService).evictAll(car.getCompanies());
+        verify(cacheEvictionService).evictAll(car.getCompanies()
+                .stream()
+                .map(Company::getId)
+                .collect(Collectors.toSet()));
         verify(carRepository).findById(EXISTING_CAR_ID);
         verify(carRepository).save(car);
         verify(carDtoMapper).map(car);
@@ -111,7 +115,10 @@ class CarServiceImplTest {
     void deleteById_shouldDeleteCar() {
         when(carRepository.findById(EXISTING_CAR_ID)).thenReturn(Optional.of(car));
         carService.deleteById(EXISTING_CAR_ID);
-        verify(cacheEvictionService).evictAll(car.getCompanies());
+        verify(cacheEvictionService).evictAll(car.getCompanies()
+                .stream()
+                .map(Company::getId)
+                .collect(Collectors.toSet()));
         verify(carRepository).findById(EXISTING_CAR_ID);
         verify(carRepository).deleteById(EXISTING_CAR_ID);
     }

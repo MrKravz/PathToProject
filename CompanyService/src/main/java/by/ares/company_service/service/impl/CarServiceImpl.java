@@ -17,7 +17,9 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import static by.ares.company_service.util.CompanyServiceConstants.*;
+import java.util.stream.Collectors;
+
+import static by.ares.company_service.util.CompanyServiceConstants.CAR_NOT_FOUND_MESSAGE;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +28,7 @@ public class CarServiceImpl implements CarService {
     private final CarRepository carRepository;
     private final CarDtoMapper carDtoMapper;
     private final CarRequestMapper carRequestMapper;
-    private final CacheEvictionService<Company> cacheEvictionService;
+    private final CacheEvictionService<Long> cacheEvictionService;
 
     @Override
     @Cacheable(value = "cars", key = "'car:' + #id", sync = true)
@@ -52,7 +54,10 @@ public class CarServiceImpl implements CarService {
                 .orElseThrow(() -> new CarNotFoundException(CAR_NOT_FOUND_MESSAGE));
         car.setMark(updateCarRequest.mark())
                 .setMileage(updateCarRequest.mileage());
-        cacheEvictionService.evictAll(car.getCompanies());
+        cacheEvictionService.evictAll(car.getCompanies()
+                .stream()
+                .map(Company::getId)
+                .collect(Collectors.toSet()));
         return carDtoMapper.map(
                 carRepository.save(car)
         );
@@ -64,7 +69,10 @@ public class CarServiceImpl implements CarService {
     public void deleteById(Long id) {
         var car = carRepository.findById(id)
                 .orElseThrow(() -> new CarNotFoundException(CAR_NOT_FOUND_MESSAGE));
-        cacheEvictionService.evictAll(car.getCompanies());
+        cacheEvictionService.evictAll(car.getCompanies()
+                .stream()
+                .map(Company::getId)
+                .collect(Collectors.toSet()));
         carRepository.deleteById(id);
     }
 

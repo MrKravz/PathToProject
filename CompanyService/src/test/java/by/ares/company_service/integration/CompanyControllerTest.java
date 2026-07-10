@@ -24,6 +24,20 @@ class CompanyControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
+    void findAllById() throws Exception {
+        Company company = saveCompany();
+        mockMvc.perform(get("/companies")
+                        .param("ids", company.getId().toString()))
+                .andExpect(status().isOk()).andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].id").value(company.getId()))
+                .andExpect(jsonPath("$[0].identifier").value(COMPANY_IDENTIFIER))
+                .andExpect(jsonPath("$[0].companyName").value(COMPANY_NAME))
+                .andExpect(jsonPath("$[0].fullName").value(COMPANY_FULL_NAME))
+                .andExpect(jsonPath("$[0].address").value(COMPANY_ADDRESS))
+                .andExpect(jsonPath("$[0].phoneNumber").value(COMPANY_PHONE_NUMBER));
+    }
+
+    @Test
     void findById() throws Exception {
         Company company = saveCompany();
         mockMvc.perform(get("/companies/{id}", company.getId()))
