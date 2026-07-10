@@ -1,6 +1,7 @@
-package by.ares.path_list_service.exception;
+package by.ares.path_list_service.util;
 
 import by.ares.path_list_service.dto.ExceptionResponse;
+import by.ares.path_list_service.exception.ApiException;
 import feign.Response;
 import feign.codec.ErrorDecoder;
 import org.springframework.http.HttpStatus;

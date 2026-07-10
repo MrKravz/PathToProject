@@ -32,9 +32,12 @@ spring:
 feign:
   client:
     company:
-      url: ${COMPANY_SERVICE_URL:}
+      url: "http://localhost:8081"
 resilience4j.circuitbreaker:
   instances:
     default:
       ignoreExceptions:
         - by.ares.path_list_service.exception.ApiException
+logging:
+  level:
+    by.ares.path_list_service.client: DEBUG

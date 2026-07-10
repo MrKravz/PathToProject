@@ -5,6 +5,7 @@ import by.ares.path_list_service.dto.CompanyDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -19,5 +20,7 @@ public interface CompanyClient {
     @GetMapping("/companies/{id}")
     CompanyDto findById(@PathVariable Long id);
 
-    List<CompanyDto> findAllById(List<Long> ids);
+    @GetMapping("/companies")
+    List<CompanyDto> findAllById(@RequestParam("ids") List<Long> ids);
+
 }

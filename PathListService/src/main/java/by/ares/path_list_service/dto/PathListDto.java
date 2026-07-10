@@ -1,13 +1,17 @@
 package by.ares.path_list_service.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PathListDto {
     private UUID id;
     private Integer number;
@@ -15,6 +19,6 @@ public class PathListDto {
     private CarDriverDto carDriverDto;
     private CompanyDto companyDto;
     private LocalDate reclamationDate;
-    private RouteDto routeDto;
-    private SeriaDto seriaDto;
+    private RouteDto route;
+    private SeriaDto seria;
 }

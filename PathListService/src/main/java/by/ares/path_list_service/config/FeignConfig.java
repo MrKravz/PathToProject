@@ -1,6 +1,6 @@
 package by.ares.path_list_service.config;
 
-import by.ares.path_list_service.exception.FeignErrorDecoder;
+import by.ares.path_list_service.util.FeignErrorDecoder;
 import feign.codec.ErrorDecoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

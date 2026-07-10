@@ -7,15 +7,16 @@ CREATE TABLE routes
     transportation_type VARCHAR(50) NOT NULL,
     start_point         VARCHAR(50) NOT NULL,
     end_point           VARCHAR(50) NOT NULL,
-    created_at          TIMESTAMP   NOT NULL,
-    updated_at          TIMESTAMP   NOT NULL,
+    created_at          TIMESTAMP,
+    updated_at          TIMESTAMP,
     deleted             BOOLEAN     NOT NULL
 );
 
 CREATE TABLE series
 (
-    id   INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    name VARCHAR(4) NOT NULL
+    id      INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    name    VARCHAR(4) NOT NULL,
+    deleted BOOLEAN    NOT NULL
 );
 
 CREATE TABLE path_lists
@@ -28,8 +29,8 @@ CREATE TABLE path_lists
     car_driver_id    BIGINT    NOT NULL,
     company_id       BIGINT    NOT NULL,
     reclamation_date DATE      NOT NULL,
-    created_at       TIMESTAMP NOT NULL,
-    updated_at       TIMESTAMP NOT NULL,
+    created_at       TIMESTAMP,
+    updated_at       TIMESTAMP,
     deleted          BOOLEAN   NOT NULL
 );
 
