@@ -32,7 +32,6 @@ class CompanyControllerTest extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$[0].id").value(company.getId()))
                 .andExpect(jsonPath("$[0].identifier").value(COMPANY_IDENTIFIER))
                 .andExpect(jsonPath("$[0].companyName").value(COMPANY_NAME))
-                .andExpect(jsonPath("$[0].fullName").value(COMPANY_FULL_NAME))
                 .andExpect(jsonPath("$[0].address").value(COMPANY_ADDRESS))
                 .andExpect(jsonPath("$[0].phoneNumber").value(COMPANY_PHONE_NUMBER));
     }
@@ -45,7 +44,6 @@ class CompanyControllerTest extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.id").value(company.getId()))
                 .andExpect(jsonPath("$.identifier").value(COMPANY_IDENTIFIER))
                 .andExpect(jsonPath("$.companyName").value(COMPANY_NAME))
-                .andExpect(jsonPath("$.fullName").value(COMPANY_FULL_NAME))
                 .andExpect(jsonPath("$.address").value(COMPANY_ADDRESS))
                 .andExpect(jsonPath("$.phoneNumber").value(COMPANY_PHONE_NUMBER));
     }
@@ -60,7 +58,6 @@ class CompanyControllerTest extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.identifier").value(COMPANY_IDENTIFIER))
                 .andExpect(jsonPath("$.companyName").value(COMPANY_NAME))
-                .andExpect(jsonPath("$.fullName").value(COMPANY_FULL_NAME))
                 .andExpect(jsonPath("$.address").value(COMPANY_ADDRESS))
                 .andExpect(jsonPath("$.phoneNumber").value(COMPANY_PHONE_NUMBER));
     }
@@ -76,7 +73,6 @@ class CompanyControllerTest extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.id").value(company.getId()))
                 .andExpect(jsonPath("$.identifier").value(COMPANY_IDENTIFIER))
                 .andExpect(jsonPath("$.companyName").value(COMPANY_NAME))
-                .andExpect(jsonPath("$.fullName").value(COMPANY_FULL_NAME))
                 .andExpect(jsonPath("$.address").value(UPDATED_COMPANY_ADDRESS))
                 .andExpect(jsonPath("$.phoneNumber").value(COMPANY_PHONE_NUMBER));
     }

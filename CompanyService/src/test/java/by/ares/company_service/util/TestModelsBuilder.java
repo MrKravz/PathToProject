@@ -49,7 +49,6 @@ public class TestModelsBuilder {
         return Company.builder()
                 .id(EXISTING_COMPANY_ID)
                 .identifier(COMPANY_IDENTIFIER)
-                .fullName(COMPANY_FULL_NAME)
                 .companyName(COMPANY_NAME)
                 .address(COMPANY_ADDRESS)
                 .phoneNumber(COMPANY_PHONE_NUMBER)
@@ -62,7 +61,6 @@ public class TestModelsBuilder {
         return CompanyDto.builder()
                 .id(EXISTING_COMPANY_ID)
                 .identifier(COMPANY_IDENTIFIER)
-                .fullName(COMPANY_FULL_NAME)
                 .companyName(COMPANY_NAME)
                 .address(COMPANY_ADDRESS)
                 .phoneNumber(COMPANY_PHONE_NUMBER)
@@ -73,13 +71,13 @@ public class TestModelsBuilder {
 
     public static CompanyCreationRequest buildCompanyCreationRequest() {
         return new CompanyCreationRequest(COMPANY_IDENTIFIER, COMPANY_NAME,
-                COMPANY_FULL_NAME, COMPANY_ADDRESS, COMPANY_PHONE_NUMBER);
+                COMPANY_ADDRESS, COMPANY_PHONE_NUMBER);
 
     }
 
     public static UpdateCompanyRequest buildUpdateCompanyRequest() {
-        return new UpdateCompanyRequest(COMPANY_NAME, COMPANY_FULL_NAME,
-                UPDATED_COMPANY_ADDRESS, COMPANY_PHONE_NUMBER);
+        return new UpdateCompanyRequest(COMPANY_NAME, UPDATED_COMPANY_ADDRESS,
+                COMPANY_PHONE_NUMBER);
 
     }
 

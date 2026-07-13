@@ -22,7 +22,6 @@ public class TestConstants {
     public static final Long NOT_EXISTING_COMPANY_ID = 0L;
     public static final String COMPANY_IDENTIFIER = "1147847423899";
     public static final String COMPANY_NAME = "Strathen Oakment";
-    public static final String COMPANY_FULL_NAME = "Jordan Belfort";
     public static final String COMPANY_ADDRESS = "Wall st., h. 3";
     public static final String UPDATED_COMPANY_ADDRESS = "Wall st., h. 5";
     public static final String COMPANY_PHONE_NUMBER = "+375291111111";

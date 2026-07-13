@@ -79,7 +79,6 @@ public class CompanyServiceImpl implements CompanyService {
         var company = companyRepository.findById(id)
                 .orElseThrow(() -> new CompanyNotFoundException(COMPANY_NOT_FOUND_MESSAGE));
         company.setCompanyName(updateCompanyRequest.companyName())
-                .setFullName(updateCompanyRequest.fullName())
                 .setAddress(updateCompanyRequest.address())
                 .setPhoneNumber(updateCompanyRequest.phoneNumber());
         return companyDtoMapper.map(

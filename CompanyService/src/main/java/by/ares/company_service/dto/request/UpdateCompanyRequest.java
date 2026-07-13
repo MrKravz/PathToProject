@@ -8,9 +8,6 @@ public record UpdateCompanyRequest(
         @NotBlank(message = "Company name cannot be blank")
         @Size(max = 100, message = "Company name must not exceed 100 characters")
         String companyName,
-        @NotBlank(message = "Full name cannot be blank")
-        @Size(max = 255, message = "Full name must not exceed 255 characters")
-        String fullName,
         @NotBlank(message = "Address cannot be blank")
         @Size(max = 255, message = "Address must not exceed 255 characters")
         String address,
