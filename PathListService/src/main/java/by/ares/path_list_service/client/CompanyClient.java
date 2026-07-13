@@ -13,7 +13,7 @@ import java.util.List;
         name = "company-service",
         contextId = "company-read-client",
         url = "${feign.client.company.url:}",
-        fallback = CompanyClientFallback.class
+        fallbackFactory = CompanyClientFallback.class
 )
 public interface CompanyClient {
 
