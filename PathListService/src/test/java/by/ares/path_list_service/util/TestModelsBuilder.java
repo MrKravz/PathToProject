@@ -95,7 +95,6 @@ public class TestModelsBuilder {
         return CompanyDto.builder()
                 .id(EXISTING_COMPANY_ID)
                 .identifier(COMPANY_IDENTIFIER)
-                .fullName(COMPANY_FULL_NAME)
                 .companyName(COMPANY_NAME)
                 .address(COMPANY_ADDRESS)
                 .phoneNumber(COMPANY_PHONE_NUMBER)

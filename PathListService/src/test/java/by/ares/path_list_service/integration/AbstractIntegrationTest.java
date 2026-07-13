@@ -5,6 +5,7 @@ import by.ares.path_list_service.dto.CarDto;
 import by.ares.path_list_service.dto.CompanyDto;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import com.redis.testcontainers.RedisContainer;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -59,6 +60,9 @@ public abstract class AbstractIntegrationTest {
     public static final PostgreSQLContainer postgresContainer =
             new PostgreSQLContainer(DockerImageName.parse("postgres:15"));
 
+    @ServiceConnection
+    public static final RedisContainer redisContainer =
+            new RedisContainer((DockerImageName.parse("redis:7")));
 
     protected void stubFindCarById() {
         wireMockServer.stubFor(get(urlEqualTo("/cars/" + CAR_ID))

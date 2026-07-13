@@ -15,7 +15,6 @@ public class CompanyDto {
     private Long id;
     private String identifier;
     private String companyName;
-    private String fullName;
     private String address;
     private String phoneNumber;
     private Set<CarDto> cars;

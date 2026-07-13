@@ -1,5 +1,6 @@
 package by.ares.path_list_service.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -27,6 +28,7 @@ public class Seria {
     @Column(name = "name")
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "seria")
     private Set<PathList> pathLists;
 

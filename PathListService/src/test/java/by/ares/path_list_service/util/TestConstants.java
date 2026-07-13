@@ -22,10 +22,10 @@ public class TestConstants {
     public static final Long EXISTING_COMPANY_ID = 1L;
     public static final String COMPANY_IDENTIFIER = "1147847423899";
     public static final String COMPANY_NAME = "Strathen Oakment";
-    public static final String COMPANY_FULL_NAME = "Jordan Belfort";
     public static final String COMPANY_ADDRESS = "Wall st., h. 3";
     public static final String COMPANY_PHONE_NUMBER = "+375291111111";
     public static final UUID EXISTING_PATH_LIST_ID = UUID.randomUUID();
+    public static final UUID NOT_EXISTING_PATH_LIST_ID = UUID.randomUUID();
     public static final LocalDate PATH_LIST_RECLAMATION_DATE = LocalDate.now();
     public static final Integer PATH_LIST_NUMBER = 1;
     public static final UUID EXISTING_ROUTE_ID = UUID.randomUUID();

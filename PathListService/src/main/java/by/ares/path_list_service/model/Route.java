@@ -1,5 +1,6 @@
 package by.ares.path_list_service.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -36,6 +37,7 @@ public class Route {
     @Column(name = "end_point")
     private String endPoint;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "route")
     private PathList pathList;
 

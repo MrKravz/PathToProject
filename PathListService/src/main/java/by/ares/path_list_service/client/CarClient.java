@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
         name = "company-service",
         contextId = "car-read-client",
         url = "${feign.client.company.url:}",
-        fallback = CarClientFallback.class
+        fallbackFactory = CarClientFallback.class
 )
 public interface CarClient {
 
