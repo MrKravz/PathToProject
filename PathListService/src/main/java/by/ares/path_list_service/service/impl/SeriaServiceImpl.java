@@ -1,7 +1,7 @@
 package by.ares.path_list_service.service.impl;
 
-import by.ares.path_list_service.dto.request.SeriaCreationRequest;
 import by.ares.path_list_service.dto.SeriaDto;
+import by.ares.path_list_service.dto.request.SeriaCreationRequest;
 import by.ares.path_list_service.exception.SeriaNotFoundException;
 import by.ares.path_list_service.mapper.SeriaDtoMapper;
 import by.ares.path_list_service.mapper.SeriaRequestMapper;
@@ -9,6 +9,9 @@ import by.ares.path_list_service.repository.SeriaRepository;
 import by.ares.path_list_service.service.SeriaService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -25,6 +28,7 @@ public class SeriaServiceImpl implements SeriaService {
     private final SeriaRequestMapper seriaRequestMapper;
 
     @Override
+    @Cacheable(value = "series_all", key = "'all_series'")
     public Set<SeriaDto> findAll() {
         return seriaRepository.findAll()
                 .stream()
@@ -33,6 +37,7 @@ public class SeriaServiceImpl implements SeriaService {
     }
 
     @Override
+    @Cacheable(value = "series", key = "#name", sync = true)
     public SeriaDto findByName(String name) {
         return seriaRepository.findByName(name)
                 .map(seriaDtoMapper::map)
@@ -41,10 +46,11 @@ public class SeriaServiceImpl implements SeriaService {
 
     @Override
     @Transactional
+    @CachePut(value = "series", key = "#result.name")
+    @CacheEvict(value = "series_all", allEntries = true)
     public SeriaDto save(SeriaCreationRequest seriaCreationRequest) {
         return seriaDtoMapper.map(
                 seriaRepository.save(seriaRequestMapper.map(seriaCreationRequest))
         );
     }
-
 }
