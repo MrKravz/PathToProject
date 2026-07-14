@@ -23,15 +23,24 @@ CREATE TABLE path_lists
 (
     id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     seria_id         INTEGER REFERENCES series (id),
-    number           INTEGER   NOT NULL,
+    number           INTEGER NOT NULL,
     route_id         UUID REFERENCES routes (id),
-    car_id           BIGINT    NOT NULL,
-    car_driver_id    BIGINT    NOT NULL,
-    company_id       BIGINT    NOT NULL,
-    reclamation_date DATE      NOT NULL,
+    car_id           BIGINT  NOT NULL,
+    car_driver_id    BIGINT  NOT NULL,
+    company_id       BIGINT  NOT NULL,
+    reclamation_date DATE    NOT NULL,
     created_at       TIMESTAMP,
     updated_at       TIMESTAMP,
-    deleted          BOOLEAN   NOT NULL
+    deleted          BOOLEAN NOT NULL
+);
+
+CREATE TABLE outbox_events
+(
+    id             UUID PRIMARY KEY,
+    aggregate_type VARCHAR(255) NOT NULL,
+    aggregate_id   VARCHAR(255) NOT NULL,
+    type           VARCHAR(255) NOT NULL,
+    payload        JSONB        NOT NULL
 );
 
 CREATE INDEX path_list_series_idx ON path_lists (seria_id);

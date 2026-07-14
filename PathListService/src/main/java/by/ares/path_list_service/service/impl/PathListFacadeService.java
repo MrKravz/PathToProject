@@ -7,7 +7,9 @@ import by.ares.path_list_service.dto.*;
 import by.ares.path_list_service.dto.request.PathListCreationRequest;
 import by.ares.path_list_service.mapper.PathListDtoMapper;
 import by.ares.path_list_service.model.PathList;
+import by.ares.path_list_service.service.OutboxEventPublisher;
 import by.ares.path_list_service.service.PathListService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +33,7 @@ public class PathListFacadeService implements PathListService {
     private final CompanyClient companyClient;
     private final CarClient carClient;
     private final CarDriverClient carDriverClient;
+    private final OutboxEventPublisher outboxEventPublisher;
 
     @Override
     public Page<PathListDto> findAllBySeria(SeriaDto seria, Pageable pageable) {
@@ -51,6 +54,7 @@ public class PathListFacadeService implements PathListService {
     }
 
     @Override
+    @Transactional
     public PathListDto save(PathListCreationRequest request) {
         PathList savedRaw = coreService.saveRaw(request);
         CarDto carDto = carClient.findById(request.carId());
@@ -60,6 +64,7 @@ public class PathListFacadeService implements PathListService {
         finalDto.setCarDto(carDto);
         finalDto.setCarDriverDto(carDriverDto);
         finalDto.setCompanyDto(companyDto);
+        outboxEventPublisher.invokeAll(finalDto);
         return finalDto;
     }
 

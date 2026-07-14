@@ -58,3 +58,6 @@ resilience4j.bulkhead:
   instances:
     company-service:
       maxConcurrentCalls: 5
+
+outbox:
+  topic-name: ${OUTBOX_TOPIC_NAME}
