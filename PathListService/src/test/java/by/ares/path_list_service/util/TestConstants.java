@@ -32,6 +32,8 @@ public class TestConstants {
     public static final TransportationType ROUTE_TRANSPORTATION_TYPE = TransportationType.URBAN;
     public static final String ROUTE_START_POINT = "Point A";
     public static final String ROUTE_END_POINT = "Point B";
+    public static final String TEST_TOPIC = "test_topic";
+    public static final String TEST_MESSAGE_HEADER = "PathListCreated";
 
     private TestConstants() {
     }

@@ -6,6 +6,7 @@ import by.ares.path_list_service.dto.*;
 import by.ares.path_list_service.dto.request.PathListCreationRequest;
 import by.ares.path_list_service.mapper.PathListDtoMapper;
 import by.ares.path_list_service.model.PathList;
+import by.ares.path_list_service.service.OutboxEventPublisher;
 import by.ares.path_list_service.service.impl.PathListCoreService;
 import by.ares.path_list_service.service.impl.PathListFacadeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,6 +41,8 @@ class PathListFacadeServiceTest {
     private CarClient carClient;
     @Mock
     private CarDriverClient carDriverClient;
+    @Mock
+    private OutboxEventPublisher outboxEventPublisher;
 
     @InjectMocks
     private PathListFacadeService facade;
@@ -125,5 +128,6 @@ class PathListFacadeServiceTest {
         verify(carDriverClient).findById(pathListCreationRequest.carDriverId());
         verify(companyClient).findById(pathListCreationRequest.companyId());
         verify(pathListDtoMapper).map(pathList);
+        verify(outboxEventPublisher).invokeAll(result);
     }
 }
