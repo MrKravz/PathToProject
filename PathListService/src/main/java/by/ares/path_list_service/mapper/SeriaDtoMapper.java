@@ -1,0 +1,10 @@
+package by.ares.path_list_service.mapper;
+
+import by.ares.path_list_service.dto.SeriaDto;
+import by.ares.path_list_service.model.Seria;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
+
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+public interface SeriaDtoMapper extends DtoMapper<Seria, SeriaDto> {
+}
