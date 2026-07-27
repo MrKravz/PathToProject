@@ -3,6 +3,9 @@ server:
 spring:
   application:
     name: DocumentService
+  threads:
+    virtual:
+      enabled: true
   kafka:
     bootstrap-servers: ${KAFKA_SERVER}
     consumer:
@@ -20,3 +23,7 @@ spring:
     uri: ${MONGODB_URI}
     representation:
       uuid: standard
+
+document-service:
+  document:
+    target-directory: "C:/Projects/DocFolder"
