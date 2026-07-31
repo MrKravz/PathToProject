@@ -33,14 +33,23 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
+
+      - name: Format Project Key
+        id: format-key
+        run: |
+          # Replaces slashes with dashes and handles root directory '.'
+          CLEAN_NAME=$(echo "${{ matrix.project }}" | sed 's/\./root/' | sed 's/\//-/g')
+          echo "PROJECT_KEY=MrKravz_$CLEAN_NAME" >> $GITHUB_ENV
+
       - name: Build, Test & Sonar
         working-directory: ${{ matrix.project }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn clean verify sonar:sonar \
-            -Dsonar.projectKey=MrKravz_PathToProject \
+          # Using the fully qualified plugin name and the dynamic project key
+          mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.projectKey=${{ env.PROJECT_KEY }} \
             -Dsonar.organization=mrkravz \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
