@@ -1,8 +1,13 @@
 package by.ares.path_list_service.util;
 
+import by.ares.path_list_service.model.CommunicationType;
+import by.ares.path_list_service.model.DocumentForm;
 import by.ares.path_list_service.model.TransportationType;
 
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.UUID;
 
 public class TestConstants {
@@ -11,7 +16,7 @@ public class TestConstants {
     public static final String SERIA_NAME = "УН";
     public static final String NOT_EXISTING_SERIA_NAME = "sd";
     public static final Long EXISTING_CAR_ID = 1L;
-    public static final String CAR_MARK = "Mercedes-Benz";
+    public static final String CAR_NAME = "Mercedes-Benz";
     public static final Integer CAR_MILEAGE = 1000;
     public static final String CAR_RESIDENT_NUMBER = "1234AS";
     public static final Long EXISTING_CAR_DRIVER_ID = 1L;
@@ -26,14 +31,17 @@ public class TestConstants {
     public static final String COMPANY_PHONE_NUMBER = "+375291111111";
     public static final UUID EXISTING_PATH_LIST_ID = UUID.randomUUID();
     public static final UUID NOT_EXISTING_PATH_LIST_ID = UUID.randomUUID();
-    public static final LocalDate PATH_LIST_RECLAMATION_DATE = LocalDate.now();
+    public static final LocalDate PATH_LIST_RECLAMATION_DATE = LocalDate.now(Clock.fixed(Instant.EPOCH,
+            ZoneId.systemDefault()));
     public static final Integer PATH_LIST_NUMBER = 1;
     public static final UUID EXISTING_ROUTE_ID = UUID.randomUUID();
-    public static final TransportationType ROUTE_TRANSPORTATION_TYPE = TransportationType.URBAN;
+    public static final CommunicationType ROUTE_COMMUNICATION_TYPE = CommunicationType.URBAN;
+    public static final TransportationType ROUTE_TRANSPORTATION_TYPE = TransportationType.ORDERED;
     public static final String ROUTE_START_POINT = "Point A";
     public static final String ROUTE_END_POINT = "Point B";
     public static final String TEST_TOPIC = "test_topic";
     public static final String TEST_MESSAGE_HEADER = "PathListCreated";
+    public static final DocumentForm DOCUMENT_FORM = DocumentForm.FORM_4P;
 
     private TestConstants() {
     }

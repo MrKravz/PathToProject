@@ -12,7 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 import static by.ares.path_list_service.util.TestModelsBuilder.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -36,7 +39,8 @@ class PathListControllerTest extends AbstractIntegrationTest {
         Route route = routeRepository.save(buildRoute().setId(null));
         PathList pathList = buildPathList(seria, route)
                 .setId(null)
-                .setReclamationDate(LocalDate.now());
+                .setReclamationDate(LocalDate.now(Clock.fixed(Instant.EPOCH,
+                        ZoneId.systemDefault())));
         return pathListRepository.save(pathList);
     }
 
@@ -55,7 +59,8 @@ class PathListControllerTest extends AbstractIntegrationTest {
     @Test
     void findAllByDate() throws Exception {
         PathList pathList = savePathList();
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(Clock.fixed(Instant.EPOCH,
+                ZoneId.systemDefault()));
         stubFindAllByIdList();
         mockMvc.perform(get("/path_lists/filter_by/date")
                         .param("start", today.minusDays(1).toString())

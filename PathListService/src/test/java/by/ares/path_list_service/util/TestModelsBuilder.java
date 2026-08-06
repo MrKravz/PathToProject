@@ -37,8 +37,7 @@ public class TestModelsBuilder {
     public static CarDto buildCarDto() {
         return CarDto.builder()
                 .id(EXISTING_CAR_ID)
-                .mark(CAR_MARK)
-                .mileage(CAR_MILEAGE)
+                .carName(CAR_NAME)
                 .residentNumber(CAR_RESIDENT_NUMBER)
                 .build();
     }
@@ -60,9 +59,11 @@ public class TestModelsBuilder {
                 .seria(seria)
                 .route(route)
                 .reclamationDate(PATH_LIST_RECLAMATION_DATE)
+                .expirationDate(PATH_LIST_RECLAMATION_DATE)
                 .carId(EXISTING_CAR_ID)
                 .carDriverId(EXISTING_CAR_DRIVER_ID)
-                .companyId(EXISTING_COMPANY_ID) // Добавил для полноты маппинга
+                .companyId(EXISTING_COMPANY_ID)
+                .documentForm(DOCUMENT_FORM)
                 .build();
     }
 
@@ -87,6 +88,7 @@ public class TestModelsBuilder {
                 EXISTING_CAR_DRIVER_ID,
                 EXISTING_COMPANY_ID,
                 routeCreationRequest,
+                DOCUMENT_FORM,
                 seriaDto
         );
     }
@@ -106,6 +108,8 @@ public class TestModelsBuilder {
     public static Route buildRoute() {
         return Route.builder()
                 .id(EXISTING_ROUTE_ID)
+                .mileage(CAR_MILEAGE)
+                .communicationType(ROUTE_COMMUNICATION_TYPE)
                 .transportationType(ROUTE_TRANSPORTATION_TYPE)
                 .startPoint(ROUTE_START_POINT)
                 .endPoint(ROUTE_END_POINT)
@@ -122,10 +126,10 @@ public class TestModelsBuilder {
     }
 
     public static RouteCreationRequest buildRouteCreationRequest() {
-        return new RouteCreationRequest(ROUTE_TRANSPORTATION_TYPE, ROUTE_START_POINT, ROUTE_END_POINT);
+        return new RouteCreationRequest(CAR_MILEAGE, ROUTE_COMMUNICATION_TYPE,
+                ROUTE_TRANSPORTATION_TYPE, ROUTE_START_POINT, ROUTE_END_POINT);
     }
 
-
-
-    private TestModelsBuilder() {}
+    private TestModelsBuilder() {
+    }
 }
