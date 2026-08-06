@@ -84,8 +84,7 @@ public class TestModelsBuilder {
     public static CarDto buildCarDto() {
         return CarDto.builder()
                 .id(EXISTING_CAR_ID)
-                .mark(CAR_MARK)
-                .mileage(CAR_MILEAGE)
+                .carName(CAR_NAME)
                 .residentNumber(CAR_RESIDENT_NUMBER)
                 .build();
     }
@@ -93,20 +92,22 @@ public class TestModelsBuilder {
     public static Car buildCar() {
         return Car.builder()
                 .id(EXISTING_CAR_ID)
-                .mark(CAR_MARK)
-                .mileage(CAR_MILEAGE)
+                .carName(CAR_NAME)
+                .carType(CAR_TYPE)
                 .residentNumber(CAR_RESIDENT_NUMBER)
                 .companies(mockCompanies())
                 .build();
     }
 
     public static UpdateCarRequest buildUpdateCarRequest() {
-        return new UpdateCarRequest(CAR_MARK, UPDATED_CAR_MILEAGE, CAR_TYPE);
+        return new UpdateCarRequest(CAR_NAME, FUEL_CONSUMPTION, ACTION_FUEL_CONSUMPTION,
+                OIL_CONSUMPTION, CAR_TYPE);
     }
 
     public static CarCreationRequest buildCarCreationRequest() {
-        return new CarCreationRequest(CAR_MARK, CAR_RESIDENT_NUMBER,
-                CAR_MILEAGE, CAR_TYPE);
+        return new CarCreationRequest(CAR_NAME, CAR_RESIDENT_NUMBER,
+                FUEL_CONSUMPTION, ACTION_FUEL_CONSUMPTION, OIL_CONSUMPTION,
+                CAR_TYPE);
     }
 
     public static Set<Company> mockCompanies() {
