@@ -19,7 +19,6 @@ CREATE TABLE cars
     car_name                VARCHAR(35) NOT NULL,
     car_type                VARCHAR(20) NOT NULL,
     resident_number         VARCHAR(10) NOT NULL,
-    mileage                 INTEGER     NOT NULL,
     fuel_consumption        INTEGER,
     action_fuel_consumption INTEGER,
     oil_consumption         INTEGER,

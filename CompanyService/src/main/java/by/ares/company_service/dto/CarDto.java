@@ -17,6 +17,5 @@ public class CarDto {
     private Integer fuelConsumption;
     private Integer actionFuelConsumption;
     private Integer oilConsumption;
-    private Integer mileage;
     private CarType carType;
 }

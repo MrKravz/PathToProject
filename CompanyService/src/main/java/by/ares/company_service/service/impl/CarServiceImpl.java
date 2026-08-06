@@ -52,8 +52,14 @@ public class CarServiceImpl implements CarService {
     public CarDto update(UpdateCarRequest updateCarRequest, Long id) {
         var car = carRepository.findById(id)
                 .orElseThrow(() -> new CarNotFoundException(CAR_NOT_FOUND_MESSAGE));
-        car.setCarName(updateCarRequest.mark())
-                .setMileage(updateCarRequest.mileage());
+        car.setCarName(updateCarRequest.carName())
+                .setCarType(updateCarRequest.carType())
+                .setFuelConsumption(updateCarRequest.fuelConsumption() == null ?
+                        car.getFuelConsumption() : updateCarRequest.fuelConsumption())
+                .setActionFuelConsumption(updateCarRequest.actionFuelConsumption() == null ?
+                        car.getActionFuelConsumption() : updateCarRequest.actionFuelConsumption())
+                .setOilConsumption(updateCarRequest.oilConsumption() == null ?
+                        car.getOilConsumption() : updateCarRequest.oilConsumption());
         cacheEvictionService.evictAll(car.getCompanies()
                 .stream()
                 .map(Company::getId)
