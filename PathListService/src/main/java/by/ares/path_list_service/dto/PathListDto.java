@@ -1,5 +1,6 @@
 package by.ares.path_list_service.dto;
 
+import by.ares.path_list_service.model.DocumentForm;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,8 @@ public class PathListDto {
     private CarDriverDto carDriverDto;
     private CompanyDto companyDto;
     private LocalDate reclamationDate;
+    private LocalDate expirationDate;
+    private DocumentForm documentForm;
     private RouteDto route;
     private SeriaDto seria;
 }
