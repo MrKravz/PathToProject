@@ -22,8 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import static by.ares.path_list_service.util.PathListServiceConstants.PATH_LIST_NOT_FOUND_MESSAGE;
-import static by.ares.path_list_service.util.PathListServiceConstants.SERIA_NOT_FOUND_MESSAGE;
+import static by.ares.path_list_service.util.PathListServiceConstants.*;
 
 @Service
 @RequiredArgsConstructor
@@ -58,6 +57,8 @@ public class PathListCoreService {
                 .orElseThrow(() -> new SeriaNotFoundException(SERIA_NOT_FOUND_MESSAGE));
         pathList.setSeria(seria);
         pathList.setReclamationDate(LocalDate.now());
+        pathList.setExpirationDate(pathList.getReclamationDate()
+                .plusDays(DEFAULT_EXPIRATION_DAYS));
         return pathListRepository.save(pathList);
     }
 

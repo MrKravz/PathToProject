@@ -1,5 +1,6 @@
 package by.ares.document_service.dto;
 
+import by.ares.document_service.model.CommunicationType;
 import by.ares.document_service.model.TransportationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +15,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RouteDto {
     private UUID id;
+    private Integer mileage;
+    private CommunicationType communicationType;
     private TransportationType transportationType;
     private String startPoint;
     private String endPoint;
