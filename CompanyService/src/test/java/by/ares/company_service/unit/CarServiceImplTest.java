@@ -93,7 +93,7 @@ class CarServiceImplTest {
         when(carRepository.save(car)).thenReturn(car);
         when(carDtoMapper.map(car)).thenReturn(carDto);
         var result = carService.update(updateCarRequest, EXISTING_CAR_ID);
-        assertEquals(carDto.getMark(), result.getMark());
+        assertEquals(carDto.getCarName(), result.getCarName());
         verify(cacheEvictionService).evictAll(car.getCompanies()
                 .stream()
                 .map(Company::getId)

@@ -33,8 +33,8 @@ class CarControllerTest extends AbstractIntegrationTest {
         mockMvc.perform(get("/cars/{id}", car.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(car.getId()))
-                .andExpect(jsonPath("$.mark").value(CAR_MARK))
-                .andExpect(jsonPath("$.mileage").value(String.valueOf(CAR_MILEAGE)));
+                .andExpect(jsonPath("$.carName").value(CAR_NAME))
+                .andExpect(jsonPath("$.carType").value(String.valueOf(CAR_TYPE)));
     }
 
     @Test
@@ -45,8 +45,8 @@ class CarControllerTest extends AbstractIntegrationTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.mark").value(CAR_MARK))
-                .andExpect(jsonPath("$.mileage").value(String.valueOf(CAR_MILEAGE)));
+                .andExpect(jsonPath("$.carName").value(CAR_NAME))
+                .andExpect(jsonPath("$.carType").value(String.valueOf(CAR_TYPE)));
     }
 
     @Test
@@ -58,8 +58,8 @@ class CarControllerTest extends AbstractIntegrationTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.id").value(car.getId()))
-                .andExpect(jsonPath("$.mark").value(CAR_MARK))
-                .andExpect(jsonPath("$.mileage").value(String.valueOf(UPDATED_CAR_MILEAGE)));
+                .andExpect(jsonPath("$.carName").value(CAR_NAME))
+                .andExpect(jsonPath("$.carType").value(String.valueOf(CAR_TYPE)));
     }
 
     @Test
