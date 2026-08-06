@@ -12,8 +12,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CarDto {
     private Long id;
-    private String mark;
+    private String carName;
     private String residentNumber;
+    private Integer fuelConsumption;
+    private Integer actionFuelConsumption;
+    private Integer oilConsumption;
     private Integer mileage;
     private CarType carType;
 }

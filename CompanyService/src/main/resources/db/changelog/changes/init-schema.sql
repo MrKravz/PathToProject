@@ -8,16 +8,24 @@ CREATE TABLE car_drivers
     surname               VARCHAR(20) NOT NULL,
     lastname              VARCHAR(20) NOT NULL,
     driver_license_number VARCHAR(12) NOT NULL,
+    created_at            TIMESTAMP   NOT NULL,
+    updated_at            TIMESTAMP   NOT NULL,
     deleted               BOOLEAN     NOT NULL
 );
 
 CREATE TABLE cars
 (
-    id              BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    mark            VARCHAR(15) NOT NULL,
-    resident_number VARCHAR(10) NOT NULL,
-    mileage         INTEGER     NOT NULL,
-    deleted         BOOLEAN     NOT NULL
+    id                      BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    car_name                VARCHAR(35) NOT NULL,
+    car_type                VARCHAR(20) NOT NULL,
+    resident_number         VARCHAR(10) NOT NULL,
+    mileage                 INTEGER     NOT NULL,
+    fuel_consumption        INTEGER,
+    action_fuel_consumption INTEGER,
+    oil_consumption         INTEGER,
+    created_at              TIMESTAMP   NOT NULL,
+    updated_at              TIMESTAMP   NOT NULL,
+    deleted                 BOOLEAN     NOT NULL
 );
 
 CREATE TABLE companies
@@ -25,9 +33,11 @@ CREATE TABLE companies
     id           BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     identifier   VARCHAR(15) NOT NULL,
     company_name VARCHAR(30),
-    full_name    VARCHAR(50),
     address      VARCHAR(50) NOT NULL,
     phone_number VARCHAR(15) NOT NULL,
+    created_at   TIMESTAMP   NOT NULL,
+    updated_at   TIMESTAMP   NOT NULL,
+    version      BIGINT      NOT NULL,
     deleted      BOOLEAN     NOT NULL
 );
 
@@ -35,14 +45,14 @@ CREATE TABLE company_cars
 (
     company_id BIGINT REFERENCES companies (id),
     car_id     BIGINT REFERENCES cars (id),
-    deleted      BOOLEAN     NOT NULL
+    deleted    BOOLEAN NOT NULL
 );
 
 CREATE TABLE company_drivers
 (
     company_id BIGINT REFERENCES companies (id),
     driver_id  BIGINT REFERENCES car_drivers (id),
-    deleted      BOOLEAN     NOT NULL
+    deleted    BOOLEAN NOT NULL
 );
 
 

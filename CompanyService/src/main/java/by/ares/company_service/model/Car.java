@@ -29,11 +29,20 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "mark")
-    private String mark;
+    @Column(name = "car_name")
+    private String carName;
 
     @Column(name = "resident_number")
     private String residentNumber;
+
+    @Column(name = "fuelConsumption")
+    private Integer fuelConsumption;
+
+    @Column(name = "actionFuelConsumption")
+    private Integer actionFuelConsumption;
+
+    @Column(name = "oilConsumption")
+    private Integer oilConsumption;
 
     @Column(name = "mileage")
     private Integer mileage;

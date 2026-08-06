@@ -52,7 +52,7 @@ public class CarServiceImpl implements CarService {
     public CarDto update(UpdateCarRequest updateCarRequest, Long id) {
         var car = carRepository.findById(id)
                 .orElseThrow(() -> new CarNotFoundException(CAR_NOT_FOUND_MESSAGE));
-        car.setMark(updateCarRequest.mark())
+        car.setCarName(updateCarRequest.mark())
                 .setMileage(updateCarRequest.mileage());
         cacheEvictionService.evictAll(car.getCompanies()
                 .stream()

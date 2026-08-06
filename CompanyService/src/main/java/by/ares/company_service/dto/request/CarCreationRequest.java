@@ -7,9 +7,9 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 public record CarCreationRequest(
-        @NotBlank(message = "Car mark cannot be blank")
-        @Size(max = 100, message = "Car mark must not exceed 100 characters")
-        String mark,
+        @NotBlank(message = "Car car name cannot be blank")
+        @Size(max = 100, message = "Car car name must not exceed 100 characters")
+        String carName,
 
         @NotBlank(message = "Resident number cannot be blank")
         @Size(max = 20, message = "Resident number must not exceed 20 characters")

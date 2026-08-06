@@ -8,8 +8,8 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 public record UpdateCarRequest(
-        @NotBlank(message = "Car mark cannot be blank")
-        @Size(max = 100, message = "Car mark must not exceed 100 characters")
+        @NotBlank(message = "Car carName cannot be blank")
+        @Size(max = 100, message = "Car carName must not exceed 100 characters")
         String mark,
 
         @NotNull(message = "Mileage must be provided")
