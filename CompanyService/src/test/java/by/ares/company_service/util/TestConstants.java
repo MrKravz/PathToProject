@@ -14,9 +14,9 @@ public class TestConstants {
     public static final Long EXISTING_CAR_ID = 1L;
     public static final Long NOT_EXISTING_CAR_ID = 0L;
     public static final String CAR_NAME = "Mercedes-Benz";
-    public static final Integer FUEL_CONSUMPTION = 12;
-    public static final Integer ACTION_FUEL_CONSUMPTION = 30;
-    public static final Integer OIL_CONSUMPTION = 3;
+    public static final Float FUEL_CONSUMPTION = 12f;
+    public static final Float ACTION_FUEL_CONSUMPTION = 30f;
+    public static final Float OIL_CONSUMPTION = 3f;
     public static final String CAR_RESIDENT_NUMBER = "1234AS";
     public static final CarType CAR_TYPE = CarType.TRUCK;
     public static final Long EXISTING_COMPANY_ID = 1L;

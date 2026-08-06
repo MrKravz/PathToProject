@@ -16,13 +16,13 @@ public record CarCreationRequest(
         String residentNumber,
 
         @Positive(message = "Fuel consumption cannot be negative")
-        Integer fuelConsumption,
+        Float fuelConsumption,
 
         @Positive(message = "Action fuel consumption cannot be negative")
-        Integer actionFuelConsumption,
+        Float actionFuelConsumption,
 
         @Positive(message = "Oil consumption cannot be negative")
-        Integer oilConsumption,
+        Float oilConsumption,
 
         @NotNull(message = "Car type must be provided")
         CarType carType

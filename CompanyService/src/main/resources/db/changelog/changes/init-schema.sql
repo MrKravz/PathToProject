@@ -19,9 +19,9 @@ CREATE TABLE cars
     car_name                VARCHAR(35) NOT NULL,
     car_type                VARCHAR(20) NOT NULL,
     resident_number         VARCHAR(10) NOT NULL,
-    fuel_consumption        INTEGER,
-    action_fuel_consumption INTEGER,
-    oil_consumption         INTEGER,
+    fuel_consumption        FLOAT,
+    action_fuel_consumption FLOAT,
+    oil_consumption         FLOAT,
     created_at              TIMESTAMP   NOT NULL,
     updated_at              TIMESTAMP   NOT NULL,
     deleted                 BOOLEAN     NOT NULL

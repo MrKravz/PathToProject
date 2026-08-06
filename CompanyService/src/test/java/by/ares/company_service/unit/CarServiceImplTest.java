@@ -21,11 +21,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static by.ares.company_service.util.TestConstants.EXISTING_CAR_ID;
-import static by.ares.company_service.util.TestConstants.NOT_EXISTING_CAR_ID;
+import static by.ares.company_service.util.TestConstants.*;
 import static by.ares.company_service.util.TestModelsBuilder.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -101,6 +101,30 @@ class CarServiceImplTest {
         verify(carRepository).findById(EXISTING_CAR_ID);
         verify(carRepository).save(car);
         verify(carDtoMapper).map(car);
+    }
+    @Test
+    void update_shouldKeepExistingFields_whenRequestFieldsAreNull() {
+        car.setFuelConsumption(FUEL_CONSUMPTION);
+        car.setActionFuelConsumption(ACTION_FUEL_CONSUMPTION);
+        car.setOilConsumption(OIL_CONSUMPTION);
+        UpdateCarRequest requestWithNulls = new UpdateCarRequest(
+                CAR_NAME,
+                null,
+                null,
+                null,
+                CAR_TYPE
+        );
+        when(carRepository.findById(EXISTING_CAR_ID)).thenReturn(Optional.of(car));
+        when(carRepository.save(any(Car.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+        when(carDtoMapper.map(any(Car.class))).thenReturn(carDto);
+        carService.update(requestWithNulls, EXISTING_CAR_ID);
+        assertEquals(CAR_NAME, car.getCarName());
+        assertEquals(CAR_TYPE, car.getCarType());
+        assertEquals(FUEL_CONSUMPTION, car.getFuelConsumption());
+        assertEquals(ACTION_FUEL_CONSUMPTION, car.getActionFuelConsumption());
+        assertEquals(OIL_CONSUMPTION, car.getOilConsumption());
+        verify(carRepository).save(car);
     }
 
     @Test

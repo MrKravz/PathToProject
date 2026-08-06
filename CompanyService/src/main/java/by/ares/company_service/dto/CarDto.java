@@ -14,8 +14,8 @@ public class CarDto {
     private Long id;
     private String carName;
     private String residentNumber;
-    private Integer fuelConsumption;
-    private Integer actionFuelConsumption;
-    private Integer oilConsumption;
+    private Float fuelConsumption;
+    private Float actionFuelConsumption;
+    private Float oilConsumption;
     private CarType carType;
 }

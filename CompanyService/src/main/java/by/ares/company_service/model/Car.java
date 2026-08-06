@@ -36,13 +36,13 @@ public class Car {
     private String residentNumber;
 
     @Column(name = "fuelConsumption")
-    private Integer fuelConsumption;
+    private Float fuelConsumption;
 
     @Column(name = "actionFuelConsumption")
-    private Integer actionFuelConsumption;
+    private Float actionFuelConsumption;
 
     @Column(name = "oilConsumption")
-    private Integer oilConsumption;
+    private Float oilConsumption;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "car_type")
