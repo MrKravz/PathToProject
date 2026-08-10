@@ -26,4 +26,5 @@ spring:
 
 document-service:
   document:
-    target-directory: "C:/Projects/DocFolder"
+    location: ${DOCUMENT_LOCATION:classpath:static/Путевой лист *.*}
+    target-directory: ${DOCUMENT_TARGET_DIRECTORY:C:/Projects/DocFolder}

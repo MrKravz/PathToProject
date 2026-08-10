@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.UUID;
 
 import static by.ares.path_list_service.util.PathListServiceConstants.*;
@@ -56,7 +57,7 @@ public class PathListCoreService {
         Seria seria = seriaRepository.findById(request.seriaDto().getId())
                 .orElseThrow(() -> new SeriaNotFoundException(SERIA_NOT_FOUND_MESSAGE));
         pathList.setSeria(seria);
-        pathList.setReclamationDate(LocalDate.now());
+        pathList.setReclamationDate(LocalDate.now(ZoneId.systemDefault()));
         pathList.setExpirationDate(pathList.getReclamationDate()
                 .plusDays(DEFAULT_EXPIRATION_DAYS));
         return pathListRepository.save(pathList);
