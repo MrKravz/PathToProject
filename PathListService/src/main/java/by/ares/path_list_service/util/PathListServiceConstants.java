@@ -8,6 +8,7 @@ public class PathListServiceConstants {
     public static final Long COMPANY_ID = 1L;
     public static final Long CAR_ID = 1L;
     public static final Long CAR_DRIVER_ID = 1L;
+    public static final Long DEFAULT_EXPIRATION_DAYS = 7L;
     public static final String MESSAGE_HEADER = "PathListCreated";
 
     private PathListServiceConstants() {}

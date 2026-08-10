@@ -27,6 +27,13 @@ public class Route {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(name = "mileage")
+    private Integer mileage;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "communication_type")
+    private CommunicationType communicationType;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "transportation_type")
     private TransportationType transportationType;

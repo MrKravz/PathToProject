@@ -41,6 +41,13 @@ public class PathList {
     @Column(name = "reclamation_date")
     private LocalDate reclamationDate;
 
+    @Column(name = "expiration_date")
+    private LocalDate expirationDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "document_form")
+    private DocumentForm documentForm;
+
     @OneToOne
     @JoinColumn(
             name = "route_id",
