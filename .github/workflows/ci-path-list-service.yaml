@@ -1,32 +1,23 @@
-name: CI Pipeline
+name: CI - Path List Service
 
 on:
   push:
     branches: [ master, develop ]
+    paths:
+      - 'PathListService/**'
+      - '.github/workflows/ci-path-list-service.yaml'
   pull_request:
     branches: [ master, develop ]
+    paths:
+      - 'PathListService/**'
+      - '.github/workflows/ci-path-list-service.yaml'
 
 jobs:
-  detect-projects:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-    steps:
-      - uses: actions/checkout@v4
-      - id: set-matrix
-        run: |
-          folders=$(find . -name "pom.xml" -not -path '*/.*' -exec dirname {} \; | sed 's/^\.\///' | jq -R . | jq -s -c .)
-          echo "Found folders: $folders"
-          echo "matrix=$folders" >> $GITHUB_OUTPUT
-
   build-test-analyze:
-    needs: detect-projects
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        project: ${{ fromJson(needs.detect-projects.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -34,22 +25,14 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Format Project Key
-        id: format-key
-        run: |
-          # Replaces slashes with dashes and handles root directory '.'
-          CLEAN_NAME=$(echo "${{ matrix.project }}" | sed 's/\./root/' | sed 's/\//-/g')
-          echo "PROJECT_KEY=MrKravz_$CLEAN_NAME" >> $GITHUB_ENV
-
       - name: Build, Test & Sonar
-        working-directory: ${{ matrix.project }}
+        working-directory: PathListService
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          # Using the fully qualified plugin name and the dynamic project key
           mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-            -Dsonar.projectKey=${{ env.PROJECT_KEY }} \
+            -Dsonar.projectKey=MrKravz_path-list-service \
             -Dsonar.organization=mrkravz \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
@@ -62,16 +45,19 @@ jobs:
     if: github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: PathListService
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/path-list-service:latest
