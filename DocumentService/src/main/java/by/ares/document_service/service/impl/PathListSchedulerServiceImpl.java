@@ -26,10 +26,9 @@ public class PathListSchedulerServiceImpl implements PathListSchedulerService,
     @KafkaListener(topics = "path_list")
     public void onPathListReceive(@Header(KafkaHeaders.RECEIVED_KEY) String aggregateId,
                                   PathListDto pathListDto) {
-        log.warn("Key: {}", aggregateId);
-        log.warn("Data: {}", pathListDto);
+        log.info("Key: {}", aggregateId);
+        log.info("Data: {}", pathListDto);
         invoke(pathListDto);
-
     }
 
     @Override
