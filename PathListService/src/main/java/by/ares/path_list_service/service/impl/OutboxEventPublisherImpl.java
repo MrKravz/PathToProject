@@ -1,6 +1,6 @@
 package by.ares.path_list_service.service.impl;
 
-import by.ares.path_list_service.dto.PathListDto;
+import by.ares.path_list_service.dto.PathListEventDto;
 import by.ares.path_list_service.service.EventListener;
 import by.ares.path_list_service.service.OutboxEventPublisher;
 import lombok.RequiredArgsConstructor;
@@ -12,20 +12,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OutboxEventPublisherImpl implements OutboxEventPublisher {
 
-    private final List<EventListener<PathListDto>> eventListeners;
+    private final List<EventListener<PathListEventDto>> eventListeners;
 
     @Override
-    public void subscribe(EventListener<PathListDto> eventListener) {
+    public void subscribe(EventListener<PathListEventDto> eventListener) {
         eventListeners.add(eventListener);
     }
 
     @Override
-    public void unsubscribe(EventListener<PathListDto> eventListener) {
+    public void unsubscribe(EventListener<PathListEventDto> eventListener) {
         eventListeners.remove(eventListener);
     }
 
     @Override
-    public void invokeAll(PathListDto pathListDto) {
+    public void invokeAll(PathListEventDto pathListDto) {
         eventListeners.forEach(x -> x.invoke(pathListDto));
     }
 }
