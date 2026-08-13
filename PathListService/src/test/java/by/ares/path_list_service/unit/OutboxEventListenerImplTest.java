@@ -1,6 +1,6 @@
 package by.ares.path_list_service.unit;
 
-import by.ares.path_list_service.dto.PathListDto;
+import by.ares.path_list_service.dto.PathListEventDto;
 import by.ares.path_list_service.model.OutboxEvent;
 import by.ares.path_list_service.repository.OutboxEventRepository;
 import by.ares.path_list_service.service.impl.OutboxEventListenerImpl;
@@ -15,6 +15,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import tools.jackson.databind.ObjectMapper;
 
 import static by.ares.path_list_service.util.TestConstants.*;
+import static by.ares.path_list_service.util.TestModelsBuilder.buildPathListEventDto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -30,19 +31,20 @@ class OutboxEventListenerImplTest {
     @InjectMocks
     private OutboxEventListenerImpl outboxEventListener;
 
+    private PathListEventDto pathListEventDto;
+
     @BeforeEach
     void setUp() {
+        pathListEventDto = buildPathListEventDto();
         ReflectionTestUtils.setField(outboxEventListener, "topicName", TEST_TOPIC);
     }
 
     @Test
     void invoke_ShouldSaveAndDeleteOutboxEvent_WhenSuccessful() {
-        PathListDto pathListDto = new PathListDto();
-        pathListDto.setId(EXISTING_PATH_LIST_ID);
         String expectedJson = "{\"id\":\"" + EXISTING_PATH_LIST_ID + "\"}";
-        when(objectMapper.writeValueAsString(pathListDto)).thenReturn(expectedJson);
-        outboxEventListener.invoke(pathListDto);
-        verify(objectMapper).writeValueAsString(pathListDto);
+        when(objectMapper.writeValueAsString(pathListEventDto)).thenReturn(expectedJson);
+        outboxEventListener.invoke(pathListEventDto);
+        verify(objectMapper).writeValueAsString(pathListEventDto);
         ArgumentCaptor<OutboxEvent> eventCaptor = ArgumentCaptor.forClass(OutboxEvent.class);
         verify(outboxEventRepository).save(eventCaptor.capture());
         verify(outboxEventRepository).delete(eventCaptor.capture());

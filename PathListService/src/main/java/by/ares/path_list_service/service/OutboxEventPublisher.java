@@ -1,6 +1,6 @@
 package by.ares.path_list_service.service;
 
-import by.ares.path_list_service.dto.PathListDto;
+import by.ares.path_list_service.dto.PathListEventDto;
 
-public interface OutboxEventPublisher extends EventManager<PathListDto> {
+public interface OutboxEventPublisher extends EventManager<PathListEventDto> {
 }

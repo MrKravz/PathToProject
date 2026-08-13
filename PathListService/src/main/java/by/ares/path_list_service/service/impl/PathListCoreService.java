@@ -4,6 +4,7 @@ import by.ares.path_list_service.dto.SeriaDto;
 import by.ares.path_list_service.dto.request.PathListCreationRequest;
 import by.ares.path_list_service.exception.PathListNotFoundException;
 import by.ares.path_list_service.exception.SeriaNotFoundException;
+import by.ares.path_list_service.mapper.PathListEventDtoMapper;
 import by.ares.path_list_service.mapper.PathListRequestMapper;
 import by.ares.path_list_service.mapper.SeriaDtoMapper;
 import by.ares.path_list_service.model.PathList;
@@ -11,6 +12,7 @@ import by.ares.path_list_service.model.Route;
 import by.ares.path_list_service.model.Seria;
 import by.ares.path_list_service.repository.PathListRepository;
 import by.ares.path_list_service.repository.SeriaRepository;
+import by.ares.path_list_service.service.OutboxEventPublisher;
 import by.ares.path_list_service.service.RouteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -32,7 +34,9 @@ public class PathListCoreService {
     private final PathListRepository pathListRepository;
     private final PathListRequestMapper pathListRequestMapper;
     private final SeriaDtoMapper seriaDtoMapper;
+    private final PathListEventDtoMapper pathListEventDtoMapper;
     private final RouteService routeService;
+    private final OutboxEventPublisher outboxEventPublisher;
     private final SeriaRepository seriaRepository;
 
     @Cacheable(value = "path_lists", key = "'path_list:' + #id", sync = true)
@@ -60,7 +64,9 @@ public class PathListCoreService {
         pathList.setReclamationDate(LocalDate.now(ZoneId.systemDefault()));
         pathList.setExpirationDate(pathList.getReclamationDate()
                 .plusDays(DEFAULT_EXPIRATION_DAYS));
-        return pathListRepository.save(pathList);
+        var result = pathListRepository.save(pathList);
+        outboxEventPublisher.invokeAll(pathListEventDtoMapper.map(result));
+        return result;
     }
 
 }

@@ -1,10 +1,12 @@
 package by.ares.path_list_service.unit;
 
+import by.ares.path_list_service.dto.PathListEventDto;
 import by.ares.path_list_service.dto.SeriaDto;
 import by.ares.path_list_service.dto.request.PathListCreationRequest;
 import by.ares.path_list_service.dto.request.RouteCreationRequest;
 import by.ares.path_list_service.exception.PathListNotFoundException;
 import by.ares.path_list_service.exception.SeriaNotFoundException;
+import by.ares.path_list_service.mapper.PathListEventDtoMapper;
 import by.ares.path_list_service.mapper.PathListRequestMapper;
 import by.ares.path_list_service.mapper.SeriaDtoMapper;
 import by.ares.path_list_service.model.PathList;
@@ -12,6 +14,7 @@ import by.ares.path_list_service.model.Route;
 import by.ares.path_list_service.model.Seria;
 import by.ares.path_list_service.repository.PathListRepository;
 import by.ares.path_list_service.repository.SeriaRepository;
+import by.ares.path_list_service.service.OutboxEventPublisher;
 import by.ares.path_list_service.service.RouteService;
 import by.ares.path_list_service.service.impl.PathListCoreService;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +28,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,17 +50,22 @@ class PathListCoreServiceTest {
     @Mock
     private PathListRequestMapper pathListRequestMapper;
     @Mock
+    private PathListEventDtoMapper pathListEventDtoMapper;
+    @Mock
     private SeriaDtoMapper seriaDtoMapper;
     @Mock
     private RouteService routeService;
     @Mock
     private SeriaRepository seriaRepository;
+    @Mock
+    private OutboxEventPublisher outboxEventPublisher;
 
     @InjectMocks
     private PathListCoreService coreService;
 
     private PathList pathList;
     private PathListCreationRequest pathListCreationRequest;
+    private PathListEventDto pathListEventDto;
     private Seria seria;
     private SeriaDto seriaDto;
     private Route route;
@@ -67,6 +78,7 @@ class PathListCoreServiceTest {
         route = buildRoute();
         routeCreationRequest = buildRouteCreationRequest();
         pathList = buildPathList(seria, route);
+        pathListEventDto = buildPathListEventDto();
         pathListCreationRequest = buildPathListCreationRequest(routeCreationRequest, seriaDto);
     }
 
@@ -99,8 +111,8 @@ class PathListCoreServiceTest {
 
     @Test
     void findAllRawByDate() {
-        LocalDate start = LocalDate.now().minusDays(5);
-        LocalDate end = LocalDate.now();
+        LocalDate start = LocalDate.now(Clock.fixed(Instant.EPOCH, ZoneId.systemDefault())).minusDays(5);
+        LocalDate end = LocalDate.now(Clock.fixed(Instant.EPOCH, ZoneId.systemDefault()));
         Pageable pageable = PageRequest.of(0, 10);
         Page<PathList> page = new PageImpl<>(List.of(pathList));
         when(pathListRepository.findAllByReclamationDateBetween(start, end, pageable)).thenReturn(page);
@@ -115,6 +127,7 @@ class PathListCoreServiceTest {
         when(routeService.save(routeCreationRequest)).thenReturn(route);
         when(seriaRepository.findById(SERIA_ID)).thenReturn(Optional.of(seria));
         when(pathListRepository.save(pathList)).thenReturn(pathList);
+        when(pathListEventDtoMapper.map(pathList)).thenReturn(pathListEventDto);
         PathList result = coreService.saveRaw(pathListCreationRequest);
         assertNotNull(result);
         assertEquals(pathList, result);
@@ -122,6 +135,7 @@ class PathListCoreServiceTest {
         verify(routeService).save(routeCreationRequest);
         verify(seriaRepository).findById(SERIA_ID);
         verify(pathListRepository).save(pathList);
+        verify(outboxEventPublisher).invokeAll(pathListEventDto);
     }
 
     @Test

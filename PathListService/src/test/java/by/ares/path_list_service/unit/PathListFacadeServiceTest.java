@@ -1,4 +1,5 @@
 package by.ares.path_list_service.unit;
+
 import by.ares.path_list_service.client.CarClient;
 import by.ares.path_list_service.client.CarDriverClient;
 import by.ares.path_list_service.client.CompanyClient;
@@ -6,7 +7,6 @@ import by.ares.path_list_service.dto.*;
 import by.ares.path_list_service.dto.request.PathListCreationRequest;
 import by.ares.path_list_service.mapper.PathListDtoMapper;
 import by.ares.path_list_service.model.PathList;
-import by.ares.path_list_service.service.OutboxEventPublisher;
 import by.ares.path_list_service.service.impl.PathListCoreService;
 import by.ares.path_list_service.service.impl.PathListFacadeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,13 +20,18 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
 import static by.ares.path_list_service.util.TestModelsBuilder.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PathListFacadeServiceTest {
@@ -41,8 +46,6 @@ class PathListFacadeServiceTest {
     private CarClient carClient;
     @Mock
     private CarDriverClient carDriverClient;
-    @Mock
-    private OutboxEventPublisher outboxEventPublisher;
 
     @InjectMocks
     private PathListFacadeService facade;
@@ -99,8 +102,8 @@ class PathListFacadeServiceTest {
 
     @Test
     void findAllByCreationDateRange() {
-        LocalDate start = LocalDate.now().minusDays(5);
-        LocalDate end = LocalDate.now();
+        LocalDate start = LocalDate.now(Clock.fixed(Instant.EPOCH, ZoneId.systemDefault())).minusDays(5);
+        LocalDate end = LocalDate.now(Clock.fixed(Instant.EPOCH, ZoneId.systemDefault()));
         Pageable pageable = PageRequest.of(0, 10);
         Page<PathList> rawPage = new PageImpl<>(List.of(pathList));
         when(coreService.findAllRawByDate(start, end, pageable)).thenReturn(rawPage);
@@ -128,6 +131,5 @@ class PathListFacadeServiceTest {
         verify(carDriverClient).findById(pathListCreationRequest.carDriverId());
         verify(companyClient).findById(pathListCreationRequest.companyId());
         verify(pathListDtoMapper).map(pathList);
-        verify(outboxEventPublisher).invokeAll(result);
     }
 }

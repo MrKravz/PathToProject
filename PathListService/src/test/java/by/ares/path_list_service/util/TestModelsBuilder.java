@@ -80,6 +80,19 @@ public class TestModelsBuilder {
                 .build();
     }
 
+    public static PathListEventDto buildPathListEventDto() {
+        return PathListEventDto.builder()
+                .id(EXISTING_PATH_LIST_ID)
+                .number(PATH_LIST_NUMBER)
+                .reclamationDate(PATH_LIST_RECLAMATION_DATE)
+                .seria(buildSeriaDto())
+                .route(buildRouteDto())
+                .carId(EXISTING_CAR_ID)
+                .carDriverId(EXISTING_CAR_DRIVER_ID)
+                .companyId(EXISTING_COMPANY_ID)
+                .build();
+    }
+
     public static PathListCreationRequest buildPathListCreationRequest(RouteCreationRequest routeCreationRequest,
                                                                        SeriaDto seriaDto) {
         return new PathListCreationRequest(
