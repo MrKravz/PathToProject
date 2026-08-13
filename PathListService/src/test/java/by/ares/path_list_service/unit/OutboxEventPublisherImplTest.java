@@ -1,6 +1,6 @@
 package by.ares.path_list_service.unit;
 
-import by.ares.path_list_service.dto.PathListDto;
+import by.ares.path_list_service.dto.PathListEventDto;
 import by.ares.path_list_service.service.EventListener;
 import by.ares.path_list_service.service.impl.OutboxEventPublisherImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 
+import static by.ares.path_list_service.util.TestModelsBuilder.buildPathListEventDto;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -20,16 +21,19 @@ import static org.mockito.Mockito.verify;
 class OutboxEventPublisherImplTest {
 
     @Mock
-    private EventListener<PathListDto> listenerOne;
+    private EventListener<PathListEventDto> listenerOne;
     @Mock
-    private EventListener<PathListDto> listenerTwo;
+    private EventListener<PathListEventDto> listenerTwo;
 
-    private List<EventListener<PathListDto>> eventListeners;
+    private List<EventListener<PathListEventDto>> eventListeners;
     private OutboxEventPublisherImpl outboxEventPublisher;
+
+    private PathListEventDto pathListEventDto;
 
     @BeforeEach
     void setUp() {
         eventListeners = new ArrayList<>();
+        pathListEventDto = buildPathListEventDto();
         outboxEventPublisher = new OutboxEventPublisherImpl(eventListeners);
     }
 
@@ -54,9 +58,8 @@ class OutboxEventPublisherImplTest {
     void invokeAll_ShouldTriggerInvokeOnAllSubscribedListeners() {
         eventListeners.add(listenerOne);
         eventListeners.add(listenerTwo);
-        PathListDto pathListDto = new PathListDto();
-        outboxEventPublisher.invokeAll(pathListDto);
-        verify(listenerOne, times(1)).invoke(pathListDto);
-        verify(listenerTwo, times(1)).invoke(pathListDto);
+        outboxEventPublisher.invokeAll(pathListEventDto);
+        verify(listenerOne, times(1)).invoke(pathListEventDto);
+        verify(listenerTwo, times(1)).invoke(pathListEventDto);
     }
 }
