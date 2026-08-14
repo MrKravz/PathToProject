@@ -15,6 +15,7 @@ import by.ares.path_list_service.repository.SeriaRepository;
 import by.ares.path_list_service.service.OutboxEventPublisher;
 import by.ares.path_list_service.service.RouteService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,7 @@ import java.util.UUID;
 
 import static by.ares.path_list_service.util.PathListServiceConstants.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PathListCoreService {
@@ -65,7 +67,9 @@ public class PathListCoreService {
         pathList.setExpirationDate(pathList.getReclamationDate()
                 .plusDays(DEFAULT_EXPIRATION_DAYS));
         var result = pathListRepository.save(pathList);
-        outboxEventPublisher.invokeAll(pathListEventDtoMapper.map(result));
+        var pathListEventDto = pathListEventDtoMapper.map(result);
+        log.info(pathListEventDto.toString());
+        outboxEventPublisher.invokeAll(pathListEventDto);
         return result;
     }
 

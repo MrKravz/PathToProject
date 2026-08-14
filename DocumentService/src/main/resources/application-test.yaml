@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: PathListService
+    name: DocumentService
   cloud:
     openfeign:
       circuitbreaker:
@@ -14,7 +14,6 @@ spring:
     virtual:
       enabled: true
   datasource:
-  data:
 
 feign:
   client:
@@ -28,11 +27,9 @@ resilience4j.circuitbreaker:
       failureRateThreshold: 50
       waitDurationInOpenState: 1000
       ignoreExceptions:
-        - by.ares.path_list_service.exception.ApiException
+        - by.ares.document_service.exception.ApiException
   instances:
-    car-read-client:
-      baseConfig: default
-    car-driver-read-client:
+    company-read-client:
       baseConfig: default
 
 resilience4j.retry:
@@ -41,11 +38,9 @@ resilience4j.retry:
       maxAttempts: 3
       waitDuration: 100ms
       retryExceptions:
-        - by.ares.path_list_service.exception.ApiTimeoutException
+        - by.ares.document_service.exception.ApiTimeoutException
   instances:
-    car-read-client:
-      baseConfig: default
-    car-driver-read-client:
+    company-read-client:
       baseConfig: default
 
 resilience4j.bulkhead:
@@ -53,10 +48,5 @@ resilience4j.bulkhead:
     default:
       maxConcurrentCalls: 5
   instances:
-    car-read-client:
+    company-read-client:
       baseConfig: default
-    car-driver-read-client:
-      baseConfig: default
-
-outbox:
-  topic-name: test-topic

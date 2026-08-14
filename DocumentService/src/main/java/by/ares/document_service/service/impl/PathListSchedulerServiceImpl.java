@@ -1,6 +1,6 @@
 package by.ares.document_service.service.impl;
 
-import by.ares.document_service.dto.PathListDto;
+import by.ares.document_service.dto.PathListEventDto;
 import by.ares.document_service.service.EventListener;
 import by.ares.document_service.service.EventPublisher;
 import by.ares.document_service.service.PathListSchedulerService;
@@ -17,33 +17,33 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PathListSchedulerServiceImpl implements PathListSchedulerService,
-        EventPublisher<PathListDto> {
+        EventPublisher<PathListEventDto> {
 
 
-    private final List<EventListener<PathListDto>> eventListeners;
+    private final List<EventListener<PathListEventDto>> eventListeners;
 
     @Override
     @KafkaListener(topics = "path_list")
     public void onPathListReceive(@Header(KafkaHeaders.RECEIVED_KEY) String aggregateId,
-                                  PathListDto pathListDto) {
+                                  PathListEventDto pathListEventDto) {
         log.info("Key: {}", aggregateId);
-        log.info("Data: {}", pathListDto);
-        invoke(pathListDto);
+        log.info("Data: {}", pathListEventDto);
+        invoke(pathListEventDto);
     }
 
     @Override
-    public void subscribe(EventListener<PathListDto> eventListener) {
+    public void subscribe(EventListener<PathListEventDto> eventListener) {
         eventListeners.add(eventListener);
     }
 
     @Override
-    public void unsubscribe(EventListener<PathListDto> eventListener) {
+    public void unsubscribe(EventListener<PathListEventDto> eventListener) {
         eventListeners.remove(eventListener);
     }
 
     @Override
-    public void invoke(PathListDto pathListDto) {
-        eventListeners.forEach(x -> x.invoke(pathListDto));
+    public void invoke(PathListEventDto pathListEventDto) {
+        eventListeners.forEach(x -> x.invoke(pathListEventDto));
     }
     
 }
