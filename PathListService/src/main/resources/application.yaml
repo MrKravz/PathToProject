@@ -5,6 +5,8 @@ spring:
     openfeign:
       circuitbreaker:
         enabled: true
+        group:
+          enabled: true
   threads:
     virtual:
       enabled: true
@@ -39,25 +41,41 @@ feign:
       url: ${COMPANY_SERVICE_URL}
 
 resilience4j.circuitbreaker:
-  instances:
-    company-service:
+  configs:
+    default:
       slidingWindowSize: 10
       failureRateThreshold: 50
       waitDurationInOpenState: 10000
-    default:
       ignoreExceptions:
         - by.ares.path_list_service.exception.ApiException
-resilience4j.retry:
   instances:
-    company-service:
+    car-read-client:
+      baseConfig: default
+    car-driver-read-client:
+      baseConfig: default
+
+resilience4j.retry:
+  configs:
+    default:
       maxAttempts: 5
       waitDuration: 500ms
       retryExceptions:
         - by.ares.path_list_service.exception.ApiTimeoutException
-resilience4j.bulkhead:
   instances:
-    company-service:
+    car-read-client:
+      baseConfig: default
+    car-driver-read-client:
+      baseConfig: default
+
+resilience4j.bulkhead:
+  configs:
+    default:
       maxConcurrentCalls: 5
+  instances:
+    car-read-client:
+      baseConfig: default
+    car-driver-read-client:
+      baseConfig: default
 
 outbox:
   topic-name: ${OUTBOX_TOPIC_NAME}

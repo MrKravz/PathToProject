@@ -6,6 +6,13 @@ spring:
   threads:
     virtual:
       enabled: true
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+        group:
+          enabled: true
+
   kafka:
     bootstrap-servers: ${KAFKA_SERVER}
     listener:
@@ -18,13 +25,38 @@ spring:
       properties:
         spring.json.trusted.packages: "*"
         spring.json.use.type.headers: false
-        spring.json.value.default.type: "by.ares.document_service.dto.PathListDto"
-
+        spring.json.value.default.type: "by.ares.document_service.dto.PathListEventDto"
 
   mongodb:
     uri: ${MONGODB_URI}
     representation:
       uuid: standard
+
+feign:
+  client:
+    company:
+      url: ${COMPANY_SERVICE_URL}
+
+resilience4j.circuitbreaker:
+  instances:
+    company-read-client:
+      slidingWindowSize: 10
+      failureRateThreshold: 50
+      waitDurationInOpenState: 10000
+    default:
+      ignoreExceptions:
+        - by.ares.document_service.exception.ApiException
+resilience4j.retry:
+  instances:
+    company-read-client:
+      maxAttempts: 5
+      waitDuration: 500ms
+      retryExceptions:
+        - by.ares.document_service.exception.ApiTimeoutException
+resilience4j.bulkhead:
+  instances:
+    company-read-client:
+      maxConcurrentCalls: 5
 
 document-service:
   document:

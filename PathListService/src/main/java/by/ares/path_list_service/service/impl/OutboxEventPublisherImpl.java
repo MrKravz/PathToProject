@@ -25,7 +25,7 @@ public class OutboxEventPublisherImpl implements OutboxEventPublisher {
     }
 
     @Override
-    public void invokeAll(PathListEventDto pathListDto) {
-        eventListeners.forEach(x -> x.invoke(pathListDto));
+    public void invokeAll(PathListEventDto pathListEventDto) {
+        eventListeners.forEach(x -> x.invoke(pathListEventDto));
     }
 }

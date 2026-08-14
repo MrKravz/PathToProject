@@ -1,11 +1,11 @@
 package by.ares.document_service.service;
 
-import by.ares.document_service.dto.PathListDto;
+import by.ares.document_service.dto.PathListEventDto;
 
 import java.util.UUID;
 
 public interface PathListService {
-    PathListDto findById(UUID id);
+    PathListEventDto findById(UUID id);
 
-    void save(PathListDto pathListDto);
+    void save(PathListEventDto pathListDto);
 }
