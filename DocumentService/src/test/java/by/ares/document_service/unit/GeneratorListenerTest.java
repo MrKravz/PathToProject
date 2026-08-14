@@ -1,6 +1,6 @@
 package by.ares.document_service.unit;
 
-import by.ares.document_service.dto.PathListDto;
+import by.ares.document_service.dto.PathListEventDto;
 import by.ares.document_service.service.DocumentGeneratorService;
 import by.ares.document_service.service.impl.GeneratorListener;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static by.ares.document_service.util.TestModelsBuilder.buildPathListDto;
+import static by.ares.document_service.util.TestModelsBuilder.buildPathListEventDto;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -21,11 +21,11 @@ class GeneratorListenerTest {
     @InjectMocks
     private GeneratorListener generatorListener;
 
-    private PathListDto pathListDto;
+    private PathListEventDto pathListDto;
 
     @BeforeEach
     void init() {
-        pathListDto = buildPathListDto();
+        pathListDto = buildPathListEventDto();
     }
 
     @Test

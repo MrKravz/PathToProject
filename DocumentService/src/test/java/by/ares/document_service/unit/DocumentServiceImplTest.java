@@ -1,7 +1,7 @@
 package by.ares.document_service.unit;
 
 import by.ares.document_service.dto.FileResponse;
-import by.ares.document_service.dto.PathListDto;
+import by.ares.document_service.dto.PathListEventDto;
 import by.ares.document_service.service.DocumentGeneratorService;
 import by.ares.document_service.service.PathListService;
 import by.ares.document_service.service.impl.DocumentServiceImpl;
@@ -17,7 +17,7 @@ import java.nio.file.Path;
 
 import static by.ares.document_service.util.TestConstants.EXISTING_PATH_LIST_ID;
 import static by.ares.document_service.util.TestModelsBuilder.buildFileResponse;
-import static by.ares.document_service.util.TestModelsBuilder.buildPathListDto;
+import static by.ares.document_service.util.TestModelsBuilder.buildPathListEventDto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -34,14 +34,14 @@ class DocumentServiceImplTest {
     @InjectMocks
     private DocumentServiceImpl documentService;
 
-    private PathListDto pathListDto;
+    private PathListEventDto pathListDto;
     private FileResponse expectedResponse;
-    private final String targetDir = "/tmp/documents";
 
     @BeforeEach
     void init() {
+        String targetDir = "/tmp/documents";
         ReflectionTestUtils.setField(documentService, "targetDirectory", targetDir);
-        pathListDto = buildPathListDto();
+        pathListDto = buildPathListEventDto();
         expectedResponse = buildFileResponse();
     }
 

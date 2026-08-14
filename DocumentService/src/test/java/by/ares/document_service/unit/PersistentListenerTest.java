@@ -1,6 +1,6 @@
 package by.ares.document_service.unit;
 
-import by.ares.document_service.dto.PathListDto;
+import by.ares.document_service.dto.PathListEventDto;
 import by.ares.document_service.service.PathListService;
 import by.ares.document_service.service.impl.PersistentListener;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static by.ares.document_service.util.TestModelsBuilder.buildPathListDto;
+import static by.ares.document_service.util.TestModelsBuilder.buildPathListEventDto;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -22,11 +22,11 @@ class PersistentListenerTest {
     @InjectMocks
     private PersistentListener persistentListener;
 
-    private PathListDto pathListDto;
+    private PathListEventDto pathListDto;
 
     @BeforeEach
     void init() {
-        pathListDto = buildPathListDto();
+        pathListDto = buildPathListEventDto();
     }
 
     @Test

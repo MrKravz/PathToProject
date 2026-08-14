@@ -1,6 +1,6 @@
 package by.ares.document_service.unit;
 
-import by.ares.document_service.dto.PathListDto;
+import by.ares.document_service.dto.PathListEventDto;
 import by.ares.document_service.service.EventListener;
 import by.ares.document_service.service.impl.PathListSchedulerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static by.ares.document_service.util.TestConstants.AGGREGATE_ID;
-import static by.ares.document_service.util.TestModelsBuilder.buildPathListDto;
+import static by.ares.document_service.util.TestModelsBuilder.buildPathListEventDto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -21,22 +21,22 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class PathListSchedulerServiceImplTest {
 
-    private List<EventListener<PathListDto>> eventListeners;
+    private List<EventListener<PathListEventDto>> eventListeners;
     private PathListSchedulerServiceImpl schedulerService;
 
     @Mock
-    private EventListener<PathListDto> mockListener1;
+    private EventListener<PathListEventDto> mockListener1;
 
     @Mock
-    private EventListener<PathListDto> mockListener2;
+    private EventListener<PathListEventDto> mockListener2;
 
-    private PathListDto pathListDto;
+    private PathListEventDto pathListDto;
 
     @BeforeEach
     void init() {
         eventListeners = new ArrayList<>();
         schedulerService = new PathListSchedulerServiceImpl(eventListeners);
-        pathListDto = buildPathListDto();
+        pathListDto = buildPathListEventDto();
     }
 
     @Test

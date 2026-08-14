@@ -1,6 +1,6 @@
 package by.ares.document_service.unit;
 
-import by.ares.document_service.dto.PathListDto;
+import by.ares.document_service.dto.PathListEventDto;
 import by.ares.document_service.exception.DocumentCreationException;
 import by.ares.document_service.model.DocumentForm;
 import by.ares.document_service.service.impl.DocumentGeneratorServiceImpl;
@@ -33,14 +33,14 @@ class DocumentGeneratorServiceImplTest {
     @Mock
     private Resource mockTemplateResource;
 
-    private PathListDto pathListDto;
+    private PathListEventDto pathListDto;
 
     @TempDir
     private Path tempDir;
 
     @BeforeEach
     void init() {
-        pathListDto = TestModelsBuilder.buildPathListDto();
+        pathListDto = TestModelsBuilder.buildPathListEventDto();
         ReflectionTestUtils.setField(documentGeneratorService, "targetDirectory", tempDir.toString());
     }
 
